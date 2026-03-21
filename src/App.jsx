@@ -31,37 +31,37 @@ function App() {
           <Route path="/events/:id" element={<EventDetails/>} />
 
           <Route path="/my-registrations" element={
-            <ProtectedRoute roles={['ROLE_STUDENT', 'ROLE_ORGANIZER']}>
+            <ProtectedRoute roles={['STUDENT', 'ORGANIZER']}>
               <MyRegistrations/>
             </ProtectedRoute>
           } />
 
           <Route path="/my-attendance" element={
-            <ProtectedRoute roles={['ROLE_STUDENT', 'ROLE_ORGANIZER']}>
+            <ProtectedRoute roles={['STUDENT', 'ORGANIZER']}>
               <MyAttendance/>
             </ProtectedRoute>
           } />
 
           <Route path="/create-event" element={
-            <ProtectedRoute roles={['ROLE_ADMIN', 'ROLE_ORGANIZER']}>
+            <ProtectedRoute roles={['ADMIN', 'ORGANIZER']}>
               <CreateEvent/>
             </ProtectedRoute>
           } />
 
           <Route path="/organizer-dashboard" element={
-            <ProtectedRoute roles={['ROLE_ORGANIZER']}>
+            <ProtectedRoute roles={['ORGANIZER']}>
               <OrganizerDashboard/>
             </ProtectedRoute>
           } />
 
           <Route path="/admin-dashboard" element={
-            <ProtectedRoute roles={['ROLE_ADMIN']}>
+            <ProtectedRoute roles={['ADMIN']}>
               <AdminDashboard/>
             </ProtectedRoute>
           } />
 
           <Route path="/organizer-requests" element={
-            <ProtectedRoute roles={['ROLE_ADMIN']}>
+            <ProtectedRoute roles={['ADMIN']}>
               <OrganizerRequests/>
             </ProtectedRoute>
           } />
