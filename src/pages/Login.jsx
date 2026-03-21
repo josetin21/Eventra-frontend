@@ -44,7 +44,7 @@ export default function Login(){
 
                 {error &&(
                     <div className="bg-red-50 text-red-600 p-3 rounded mb-4 text-sm">
-                        {Error}
+                        {error}
                     </div>
                 )}
 

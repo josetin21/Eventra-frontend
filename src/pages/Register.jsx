@@ -1,3 +1,175 @@
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import api from "../api/axios";
+
 export default function Register(){
-    return <div>Register page</div>
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        password: '',
+        department: '',
+        year: '',
+        designation: 'STUDENT'
+    })
+    const [error, setError] = useState('')
+    const [loading, setLoading] = useState(false)
+    const navigate = useNavigate()
+
+    const handleChange = (e) =>{
+        setFormData({ ...formData, [e.target.name]: e.target.value })
+    }
+
+    const handleSubmit = async (e) =>{
+        e.preventDefault()
+        console.log('Submitting:', formData) 
+        setError('')
+        setLoading(true)
+
+        try{
+            await api.post('auth/register',{
+                ...formData,
+                year: parseInt(formData.year)
+            })
+            navigate('/login')
+        } catch(err){
+            setError(err.response?.data?.message || 'Registration failed')
+        } finally{
+            setLoading(false)
+        }
+    }
+
+    return(
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8">
+            <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+
+                <h1 className="text-2xl font-bold text-center text-blue-600 mb-2">
+                    Create Account
+                </h1>
+                <p className="text-center text-gray-500 mb-6">Join Eventra today</p>
+
+                {error && (
+                    <div className="bg-red-50 text-red-600 p-3 rounded mb-4 text-sm">
+                        {error}
+                    </div>
+                )}
+
+                <form onSubmit={handleSubmit}>
+                    
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Full Name
+                        </label>
+                        <input
+                            type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            className="w-full border-gray-300 rounded px-3 py-2 focus outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="John Doe"
+                            required
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Email
+                        </label>
+                        <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            className="w-full border-gray-300 rounded px-3 py-2 focus outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="you@example.com"
+                            required
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Password
+                        </label>
+                        <input
+                            type="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            className="w-full border-gray-300 rounded px-3 py-2 focus outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="••••••••"
+                            required
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Department
+                        </label>
+                        <input
+                            type="text"
+                            name="department"
+                            value={formData.department}
+                            onChange={handleChange}
+                            className="w-full border-gray-300 rounded px-3 py-2 focus outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Computer Science"
+                            required
+                        />
+                    </div>
+
+                    <div className="flex gap-4 mb-6">
+
+                        <div className="flex-1">
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Year
+                            </label>
+                            <select
+                                name="year"
+                                value={formData.year}
+                                onChange={handleChange}
+                                className="w-full border-gray-300 rounded px-3 py-2 focus outline-none focus:ring-2 focus:ring-blue-500"
+                                required
+                            >
+                                    <option value="">Select</option>
+                                    <option value="1">1st Year</option>
+                                    <option value="2">2nd Year</option>
+                                    <option value="3">3rd Year</option>
+                                    <option value="4">4th Year</option>
+                            </select>
+                        </div>
+                        
+                        <div className="flex-1">
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Designation
+                            </label>
+                            <select
+                                name="designation"
+                                value={formData.designation}
+                                onChange={handleChange}
+                                className="w-full border-gray-300 rounded px-3 py-2 focus outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                                    <option value="STUDENT">Student</option>
+                                    <option value="FACULTY">Faculty</option>
+                                    <option value="CLUB_COORDINATOR">Club Coordinator</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="w-full bg-blue-600 text-white py-2 rounded font-medium hover:bg-blue-700 disabled:opacity-50"
+                    >
+                        {loading ? 'Creating account...' : 'Create Account'}
+                    </button>
+                </form>
+
+                <p className="text-center text-sm text-gray-500 mt-4"> 
+                    Already have an account?{' '}
+                    <Link to="/login" className="text-blue-600 hover:underline">
+                        Sign in
+                    </Link>
+                </p>
+
+            </div>
+        </div>
+    )
 }
