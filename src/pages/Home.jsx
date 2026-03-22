@@ -67,7 +67,7 @@ export default function Home(){
                                 </span>
 
                                 <Link
-                                    to={'/events/${event.id}'}
+                                    to={`/events/${event.id}`}
                                     className="text-blue-600 text-sm font-medium hover:underline"
                                 >
                                     View Details → 

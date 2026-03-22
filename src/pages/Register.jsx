@@ -21,7 +21,6 @@ export default function Register(){
 
     const handleSubmit = async (e) =>{
         e.preventDefault()
-        console.log('Submitting:', formData) 
         setError('')
         setLoading(true)
 

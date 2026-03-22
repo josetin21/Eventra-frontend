@@ -1,3 +1,160 @@
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useAuth } from '../context/AuthContext'
+import api from './../api/axios';
+
+
 export default function EventDetails(){
-    return <div>Event details page</div>
+    const {id} = useParams()
+    const {user} = useAuth()
+    const navigate = useNavigate()
+
+    const [event, setEvent] = useState(null)
+    const [loading, setLoading] = useState(true)
+    const [registering, setRegistering] = useState(false)
+    const [message, setMessage] = useState('')
+    const [error, setError] = useState('')
+
+    useEffect(() =>{
+        api.get(`/events/${id}`)
+        .then(res => setEvent(res.data))
+        .catch(err => console.error(err))
+        .finally(() => setLoading(false))
+    }, [id])
+
+    const handleRegister = async () => {
+        if(!user){
+            navigate('login')
+            return
+        }
+
+        setRegistering(true)
+        setError('')
+        setMessage('')
+
+        try{
+            await api.post(`/registrations/events/${id}`)
+            setMessage('🎉 Successfully registered! Check your email for confirmation.')
+        }catch(err){
+            setError(err.response?.data?.message || 'Registration failed')
+        }finally{
+            setRegistering(false)
+        }
+    }
+
+    if(loading) return(
+        <div className="text-center py-20 text-gray-500">Loading event...</div>
+    )
+
+    if(!event) return(
+        <div className="text-center py-20 text-gray-500">Event not found.</div>
+    )
+
+    const isFull = event.registeredCount >= event.capacity
+    const isExpired = new Date() > new Date(event.registrationDeadline)
+    const isCancelled = event.status === 'CANCELLED'
+    const canRegister = !isFull && !isExpired && !isCancelled && user?.role === 'STUDENT'
+
+    return(
+        <div className="max-w-3xl mx-auto">
+
+            <div className="bg-blue-600 rounded-t-lg px-8 py-6">
+                <h1 className="text-3xl font-bold text-white">{event.title}</h1>
+                <p className="text-blue-200 mt-1">Organized by {event.organizerName}</p>
+            </div>
+
+            <div className="bg-white rounded-b-lg shadow-md px-8 py-6">
+                
+                <div className="mb-6">
+                    <span className={`text-sm px-3 py-1 rounded-full font-medium ${
+                        event.status === 'ACTIVE'
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-red-100 text-red-700'
+                    }`}>
+                        {event.status}
+                    </span>
+                </div>
+
+                <p className="text-gray-700 mb-6">{event.description}</p>
+
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                    <div className="bg-gray-50 rounded-lg p-4">
+                        <p className="text-xs text-gray-500 mb-1">Event Date</p>
+                        <p className="font-medium text-gray-800">
+                            {new Date(event.eventDate).toLocaleDateString('en-IN',{
+                                day: 'numeric', month: 'long', year:'numeric',
+                                hour:'2-digit', minute:'2-digit'
+                            })}
+                        </p>
+                    </div> 
+                    <div className="bg-gray-50 rounded-lg p-4">
+                        <p className="text-xs text-gray-500 mb-1">Venue</p>
+                        <p className="font-medium text-gray-800">{event.venue}</p>
+                    </div>
+
+                    <div className="bg-gray-50 rounded-lg p-4">
+                        <p className="text-xs text-gray-500 mb-1">Registration Deadline</p>
+                        <p className="font-medium text-gray-800">
+                            {new Date(event.registrationDeadline).toLocaleDateString('en-IN',{
+                                day:'numeric', month:'long', year:'numeric'
+                            })}
+                        </p>
+                    </div>
+
+                    <div className="bg-gray-50 rounded-lg p-4">
+                        <p className="text-xs text-gray-500 mb-1">Capacity</p>
+                        <p className="font-medium text-gray-800">
+                            {event.registeredCount} / {event.capacity} registered
+                        </p>
+                        <div className="mt-2 bg-gray-200 rounded-full h-2">
+                            <div
+                                className="bg-blue-600 rounded-full h-2"
+                                style={{width: `${(event.registeredCount / event.capacity) * 100}%` }} 
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                {message && (
+                    <div className="bg-green-50 text-green-700 rounded-lg mb-4">
+                        {message}
+                    </div>
+                )}
+
+                {error && (
+                    <div className="bg-red-50 text-red-700 rounded-lg mb-4">
+                        {error}
+                    </div>
+                )}
+
+                {!user && (
+                    <button 
+                        onClick={() => navigate('/login')}
+                        className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700"
+                    >
+                        Login to Register
+                    </button>
+                )}
+
+                {user?.role === 'STUDENT' && (
+                    <button
+                        onClick={handleRegister}
+                        disabled={!canRegister || registering}
+                        className={`w-full py-3 rounded-lg font-medium ${
+                            canRegister
+                                ? 'bg-blue-600 text-white hover:bg-blue-700'
+                                : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                        }`}
+                        >
+                        {registering ? 'Registering...':
+                         isFull ? 'Event Full':
+                         isExpired ? 'Registration Closed':
+                         isCancelled ? 'Event Cancelled':
+                         'Register for this Event'}
+                    </button>
+                )}
+
+            </div>
+        </div>
+    )
 }
