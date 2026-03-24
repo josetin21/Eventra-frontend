@@ -54,7 +54,7 @@ export default function Navbar(){
                        <Link to="/admin-dashboard" className='hover:text-blue-200'>
                             Dashboard
                         </Link>
-                        <Link to="/organizer-request" className='hover:text-blue-200'>
+                        <Link to="/organizer-requests" className='hover:text-blue-200'>
                             Request
                         </Link>
                     </>

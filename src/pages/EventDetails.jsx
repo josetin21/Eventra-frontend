@@ -33,7 +33,7 @@ export default function EventDetails(){
         setMessage('')
 
         try{
-            await api.post(`/registrations/events/${id}`)
+            await api.post(`/registration/events/${id}`)
             setMessage('🎉 Successfully registered! Check your email for confirmation.')
         }catch(err){
             setError(err.response?.data?.message || 'Registration failed')
