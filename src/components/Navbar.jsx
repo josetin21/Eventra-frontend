@@ -35,6 +35,9 @@ export default function Navbar(){
                         <Link to="/my-attendance" className='hover:text-blue-200'>
                             My Attendance
                         </Link>
+                        <Link to="/request-organizer" className='hover:text-blue-200'>
+                            Become Organizer
+                        </Link>
                     </>
                 )}
 

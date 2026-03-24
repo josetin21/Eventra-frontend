@@ -11,6 +11,7 @@ import CreateEvent from './pages/CreateEvent'
 import OrganizerDashboard from './pages/OrganizerDashboard'
 import AdminDashboard from './pages/AdminDashboard'
 import OrganizerRequests from './pages/OrganizerRequests'
+import OrganizerRequestForm from './pages/OrganizerRequestForm.jsx'
 
 function ProtectedRoute({ children, roles }) {
   const { user } = useAuth()
@@ -64,6 +65,12 @@ function App() {
             <ProtectedRoute roles={['ADMIN']}>
               <OrganizerRequests/>
             </ProtectedRoute>
+          } />
+
+          <Route path="/request-organizer" element={
+              <ProtectedRoute roles={['STUDENT']}>
+                  <OrganizerRequestForm/>
+              </ProtectedRoute>
           } />
 
         </Routes>
