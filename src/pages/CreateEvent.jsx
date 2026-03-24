@@ -30,13 +30,13 @@ export default function CreateEvent(){
                 ...formData,
                 capacity: parseInt(formData.capacity),
                 eventDate: formData.eventDate + ':00',
-                registrationDeadLine: formData.registrationDeadline + ':00'
+                registrationDeadline: formData.registrationDeadline + ':00'
             })
             navigate(`/events/${res.data.id}`)
         }catch (err){
             setError(err.response?.data?.message || 'Failed to create event')
         }finally {
-            setLoading(true)
+            setLoading(false)
         }
     }
 
@@ -77,7 +77,7 @@ export default function CreateEvent(){
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                             Description
                         </label>
-                        <input
+                        <textarea
                             name="description"
                             value={formData.description}
                             onChange={handleChange}
@@ -136,7 +136,7 @@ export default function CreateEvent(){
 
                         <div className="flex-1 min-w-0">
                             <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Registration DeadLine
+                                Registration Deadline
                             </label>
                             <input
                                 type="datetime-local"
