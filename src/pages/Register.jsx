@@ -63,7 +63,7 @@ export default function Register(){
                             name="name"
                             value={formData.name}
                             onChange={handleChange}
-                            className="w-full border-gray-300 rounded px-3 py-2 focus outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full border border-gray-300 rounded px-3 py-2 focus outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="John Doe"
                             required
                         />
@@ -78,7 +78,7 @@ export default function Register(){
                             name="email"
                             value={formData.email}
                             onChange={handleChange}
-                            className="w-full border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="you@example.com"
                             required
                         />
@@ -93,7 +93,7 @@ export default function Register(){
                             name="password"
                             value={formData.password}
                             onChange={handleChange}
-                            className="w-full border-gray-300 rounded px-3 py-2 focus outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full border border-gray-300 rounded px-3 py-2 focus outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="••••••••"
                             required
                         />
@@ -108,7 +108,7 @@ export default function Register(){
                             name="department"
                             value={formData.department}
                             onChange={handleChange}
-                            className="w-full border-gray-300 rounded px-3 py-2 focus outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full border border-gray-300 rounded px-3 py-2 focus outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Computer Science"
                             required
                         />
@@ -124,7 +124,7 @@ export default function Register(){
                                 name="year"
                                 value={formData.year}
                                 onChange={handleChange}
-                                className="w-full border-gray-300 rounded px-3 py-2 focus outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full border border-gray-300 rounded px-3 py-2 focus outline-none focus:ring-2 focus:ring-blue-500"
                                 required
                             >
                                     <option value="">Select</option>
@@ -143,7 +143,7 @@ export default function Register(){
                                 name="designation"
                                 value={formData.designation}
                                 onChange={handleChange}
-                                className="w-full border-gray-300 rounded px-3 py-2 focus outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full border border-gray-300 rounded px-3 py-2 focus outline-none focus:ring-2 focus:ring-blue-500"
                             >
                                     <option value="STUDENT">Student</option>
                                     <option value="FACULTY">Faculty</option>
