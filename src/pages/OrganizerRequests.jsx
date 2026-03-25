@@ -21,7 +21,7 @@ export default function OrganizerRequests(){
     const handleApprove = async (id) =>{
         setActionLoading(id)
         try{
-            await api.put(`organizer-requests/${id}/approve`)
+            await api.put(`/organizer-requests/${id}/approve`)
             fetchRequests()
         } catch (err){
             console.error(err)

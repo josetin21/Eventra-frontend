@@ -25,7 +25,7 @@ export default function OrganizerDashboard(){
         {label: "Total Events", value: stats.myTotalEvents},
         {label: "Active Events", value: stats.myActiveEvents},
         {label: "Cancelled Events", value: stats.myCancelledEvents},
-        {label: "Total Registration", value: stats.myTotalRegistration},
+        {label: "Total Registrations", value: stats.myTotalRegistrations},
         {label: "Total Attendance", value: stats.myTotalAttendance}
     ]
 
@@ -43,7 +43,7 @@ export default function OrganizerDashboard(){
 
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {cards.map(cards =>(
-                    <div key="{cards.label}" className="bg-white rounded-lg shadow-md p-6">
+                    <div key={cards.label} className="bg-white rounded-lg shadow-md p-6">
                         <p className="text-sm text-gray-500 mb-1">{cards.label}</p>
                         <p className="text-3xl font-bold text-blue-600">{cards.value}</p>
                     </div>
