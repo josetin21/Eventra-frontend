@@ -26,9 +26,9 @@ function App() {
       <NavBar />
       <div className="max-w-6xl mx-auto px-4 py-8">
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />}/>
-          <Route path="/register" element={<Register />} />
+          <Route path="/" element={<Home/>} />
+          <Route path="/login" element={<Login/>}/>
+          <Route path="/register" element={<Register/>} />
           <Route path="/events/:id" element={<EventDetails/>} />
 
           <Route path="/my-registrations" element={
@@ -67,7 +67,7 @@ function App() {
             </ProtectedRoute>
           } />
 
-          <Route path="pending-events" element={
+          <Route path="/pending-events" element={
               <ProtectedRoute roles={['ADMIN']}>
                   <PendingEvents />
               </ProtectedRoute>

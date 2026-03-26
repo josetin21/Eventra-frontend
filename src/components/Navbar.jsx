@@ -33,16 +33,16 @@ export default function Navbar(){
                         <Link to="/my-registrations" className='hover:text-blue-200'>
                             My Registrations
                         </Link>
-                        <Link to="/my-attendance" className='hover:text-blue-200'>
+                        <Link to="/my-events" className='hover:text-blue-200'>
                             My Events
                         </Link>
                         <Link to="/my-attendance" className='hover:text-blue-200'>
                             My Attendance
                         </Link>
-                        <Link to="/request-organizer" className='hover:text-blue-200'>
+                        <Link to="/create-event" className='hover:text-blue-200'>
                             Create Event
                         </Link>
-                        <Link to="/request-organizer" className='hover:text-blue-200'>
+                        <Link to="/scan-qr" className='hover:text-blue-200'>
                             Scan QR
                         </Link>
                     </>
@@ -53,7 +53,7 @@ export default function Navbar(){
                        <Link to="/admin-dashboard" className='hover:text-blue-200'>
                             Dashboard
                         </Link>
-                        <Link to="/organizer-requests" className='hover:text-blue-200'>
+                        <Link to="/pending-events" className='hover:text-blue-200'>
                             Approvals
                         </Link>
                     </>
