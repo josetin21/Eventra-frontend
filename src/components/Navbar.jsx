@@ -18,6 +18,7 @@ export default function Navbar(){
             </Link>
 
             <div className='flex items-center gap-6 text-sm font-medium'>
+
                 <Link to="/" className='hover:text-blue-200'>Events</Link>
 
                 {!user &&(
@@ -27,27 +28,22 @@ export default function Navbar(){
                     </>
                 )}
 
-                {user?.role === 'STUDENT' &&(
+                {user &&(
                     <>
                         <Link to="/my-registrations" className='hover:text-blue-200'>
                             My Registrations
                         </Link>
                         <Link to="/my-attendance" className='hover:text-blue-200'>
+                            My Events
+                        </Link>
+                        <Link to="/my-attendance" className='hover:text-blue-200'>
                             My Attendance
                         </Link>
                         <Link to="/request-organizer" className='hover:text-blue-200'>
-                            Become Organizer
-                        </Link>
-                    </>
-                )}
-
-                {user?.role === 'ORGANIZER' &&(
-                    <>
-                       <Link to="/create-event" className='hover:text-blue-200'>
                             Create Event
                         </Link>
-                        <Link to="/organizer-dashboard" className='hover:text-blue-200'>
-                            Dashboard
+                        <Link to="/request-organizer" className='hover:text-blue-200'>
+                            Scan QR
                         </Link>
                     </>
                 )}
@@ -58,7 +54,7 @@ export default function Navbar(){
                             Dashboard
                         </Link>
                         <Link to="/organizer-requests" className='hover:text-blue-200'>
-                            Request
+                            Approvals
                         </Link>
                     </>
                 )}

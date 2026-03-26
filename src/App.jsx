@@ -8,10 +8,10 @@ import EventDetails from './pages/EventDetails'
 import MyRegistrations from './pages/MyRegistrations' 
 import MyAttendance from './pages/MyAttendance'
 import CreateEvent from './pages/CreateEvent'
-import OrganizerDashboard from './pages/OrganizerDashboard'
 import AdminDashboard from './pages/AdminDashboard'
-import OrganizerRequests from './pages/OrganizerRequests'
-import OrganizerRequestForm from './pages/OrganizerRequestForm.jsx'
+import MyEvents from './pages/MyEvents.jsx'
+import PendingEvents from './pages/PendingEvents.jsx'
+import ScanQR from './pages/ScanQR.jsx'
 
 function ProtectedRoute({ children, roles }) {
   const { user } = useAuth()
@@ -32,28 +32,34 @@ function App() {
           <Route path="/events/:id" element={<EventDetails/>} />
 
           <Route path="/my-registrations" element={
-            <ProtectedRoute roles={['STUDENT', 'ORGANIZER']}>
+            <ProtectedRoute roles={['STUDENT', 'ADMIN']}>
               <MyRegistrations/>
             </ProtectedRoute>
           } />
 
           <Route path="/my-attendance" element={
-            <ProtectedRoute roles={['STUDENT', 'ORGANIZER']}>
+            <ProtectedRoute roles={['STUDENT', 'ADMIN']}>
               <MyAttendance/>
             </ProtectedRoute>
           } />
 
+          <Route path="/my-events" element={
+              <ProtectedRoute roles={['STUDENT', 'ADMIN']}>
+                  <MyEvents />
+              </ProtectedRoute>
+          }/>
+
           <Route path="/create-event" element={
-            <ProtectedRoute roles={['ADMIN', 'ORGANIZER']}>
+            <ProtectedRoute roles={['ADMIN', 'STUDENTS']}>
               <CreateEvent/>
             </ProtectedRoute>
           } />
 
-          <Route path="/organizer-dashboard" element={
-            <ProtectedRoute roles={['ORGANIZER']}>
-              <OrganizerDashboard/>
-            </ProtectedRoute>
-          } />
+          <Route path="/scan-qr" element={
+              <ProtectedRoute roles={['STUDENT', 'ADMIN']}>
+                  <ScanQR />
+              </ProtectedRoute>
+          }/>
 
           <Route path="/admin-dashboard" element={
             <ProtectedRoute roles={['ADMIN']}>
@@ -61,17 +67,11 @@ function App() {
             </ProtectedRoute>
           } />
 
-          <Route path="/organizer-requests" element={
-            <ProtectedRoute roles={['ADMIN']}>
-              <OrganizerRequests/>
-            </ProtectedRoute>
-          } />
-
-          <Route path="/request-organizer" element={
-              <ProtectedRoute roles={['STUDENT']}>
-                  <OrganizerRequestForm/>
+          <Route path="pending-events" element={
+              <ProtectedRoute roles={['ADMIN']}>
+                  <PendingEvents />
               </ProtectedRoute>
-          } />
+          }/>
 
         </Routes>
       </div>
