@@ -1,3 +1,3 @@
 export default function PendingEvents() {
-    return <div>Pending Events Page</div>
+    return <div>Pending events page</div>
 }

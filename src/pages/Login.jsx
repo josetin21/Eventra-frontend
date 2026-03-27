@@ -20,10 +20,15 @@ export default function Login(){
         setLoading(true)
 
         try{
-            const response = await api.post('/auth/login', { email, password })
-            login(response.data)
+            const res = await api.post('/auth/login', { email, password })
+            login({
+                token: res.data.token,
+                role: res.data.role,
+                name: res.data.name,
+                designation: res.data.designation
+            })
 
-            const role = response.data.role
+            const role = res.data.role
             if(role === 'ADMIN') navigate('/admin-dashboard')
             else if(role === 'ORGANIZER') navigate('/organizer-dashboard')
             else navigate('/')

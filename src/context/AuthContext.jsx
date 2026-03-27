@@ -7,13 +7,15 @@ export function AuthProvider({ children }) {
         const token = localStorage.getItem('token')
         const role = localStorage.getItem('role')
         const name = localStorage.getItem('name')
-        return token ? { token, role, name } : null
+        const designation = localStorage.getItem('designation')
+        return token ? { token, role, name, designation } : null
     })
 
     const login = (data) =>{
         localStorage.setItem('token', data.token)
         localStorage.setItem('role', data.role)
         localStorage.setItem('name', data.name)
+        localStorage.setItem('designation', data.designation || '')
         setUser(data)
     }
 
@@ -21,6 +23,7 @@ export function AuthProvider({ children }) {
         localStorage.removeItem('token')
         localStorage.removeItem('role')
         localStorage.removeItem('name')
+        localStorage.removeItem('designation')
         setUser(null)
     }
 

@@ -32,31 +32,31 @@ function App() {
           <Route path="/events/:id" element={<EventDetails/>} />
 
           <Route path="/my-registrations" element={
-            <ProtectedRoute roles={['STUDENT', 'ADMIN']}>
+            <ProtectedRoute roles={['USER', 'ADMIN']}>
               <MyRegistrations/>
             </ProtectedRoute>
           } />
 
           <Route path="/my-attendance" element={
-            <ProtectedRoute roles={['STUDENT', 'ADMIN']}>
+            <ProtectedRoute roles={['USER', 'ADMIN']}>
               <MyAttendance/>
             </ProtectedRoute>
           } />
 
           <Route path="/my-events" element={
-              <ProtectedRoute roles={['STUDENT', 'ADMIN']}>
+              <ProtectedRoute roles={['USER', 'ADMIN']}>
                   <MyEvents />
               </ProtectedRoute>
           }/>
 
           <Route path="/create-event" element={
-            <ProtectedRoute roles={['ADMIN', 'STUDENTS']}>
+            <ProtectedRoute roles={['ADMIN', 'USER']}>
               <CreateEvent/>
             </ProtectedRoute>
           } />
 
           <Route path="/scan-qr" element={
-              <ProtectedRoute roles={['STUDENT', 'ADMIN']}>
+              <ProtectedRoute roles={['USER', 'ADMIN']}>
                   <ScanQR />
               </ProtectedRoute>
           }/>
