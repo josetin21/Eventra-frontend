@@ -1,6 +1,7 @@
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import api from '../api/axios.js'
+import {uploadToCloudinary} from "../api/cloudinary.js";
 
 export default function CreateEvent(){
     const [formData, setFormData] = useState({
@@ -14,6 +15,10 @@ export default function CreateEvent(){
         permissionLetterUrl: ''
     })
 
+    const [idCardUrl, setIdCardUrl] = useState('')
+    const [permissionLetterUrl, setPermissionLetterUrl] = useState('')
+    const [idCardUploading, setIdCardUploading] = useState(false)
+    const [permissionLetterUploading, setPermissionLetterUploading] = useState(false)
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
     const [submitted, setSubmitted] = useState(false)
@@ -23,11 +28,46 @@ export default function CreateEvent(){
         setFormData({...formData, [e.target.name]: e.target.value })
     }
 
+    const handleFileUpload = async (e, type) =>{
+        const file = e.target.files[0]
+        if (!file) return
+
+        const allowed = ['image/jpeg', 'image/png', 'application/pdf']
+        if (!allowed.includes(file.type)){
+            setError('Only JPG, PNG or PDF files are allowed.')
+            return
+        }
+
+        if (file.size > 5 * 1024 * 1024){
+            setError('File size must be under 5MB')
+            return
+        }
+
+        setError('')
+
+        try{
+            if (type === 'idCard'){
+                setIdCardUploading(true)
+                const url = await uploadToCloudinary(file)
+                setIdCardUrl(url)
+            }else {
+                setPermissionLetterUploading(true)
+                const url = await uploadToCloudinary(file)
+                setPermissionLetterUrl(url)
+            }
+        }catch (err){
+            setError('File upload failed. Please try again')
+        }finally {
+            setIdCardUploading(false)
+            setPermissionLetterUploading(false)
+        }
+    }
+
     const handleSubmit = async (e) =>{
         e.preventDefault()
         setError('')
 
-        if (!formData.idCardUrl.trim() && !formData.permissionLetterUrl.trim()){
+        if (!idCardUrl && !permissionLetterUrl){
             setError('Please provide at least one verification document URL.')
             return
         }
@@ -36,6 +76,8 @@ export default function CreateEvent(){
         try{
             await api.post(`/events`,{
                 ...formData,
+                idCardUrl,
+                permissionLetterUrl,
                 capacity: parseInt(formData.capacity),
                 eventDate: formData.eventDate + ':00',
                 registrationDeadline: formData.registrationDeadline + ':00'
@@ -46,6 +88,20 @@ export default function CreateEvent(){
         }finally {
             setLoading(false)
         }
+    }
+
+    const  resetForm = () =>{
+        setSubmitted(false)
+        setFormData({
+            title: '',
+            description: '',
+            eventDate: '',
+            venue: '',
+            capacity: '',
+            registrationDeadline: ''
+        })
+        setIdCardUrl('')
+        setPermissionLetterUrl('')
     }
 
     if (submitted) return (
@@ -64,16 +120,7 @@ export default function CreateEvent(){
                         View My Events
                     </button>
                     <button
-                        onClick={() => { setSubmitted(false); setFormData({
-                            title: '',
-                            description: '',
-                            eventDate: '',
-                            venue: '',
-                            capacity: '',
-                            registrationDeadline: '',
-                            idCardUrl: '',
-                            permissionLetterUrl: ''
-                        }) }}
+                        onClick={resetForm}
                         className="flex-1 border border-gray-300 text-gray-600 py-2 rounded-lg font-medium hover:bg-gray-50"
                     >
                         Create Another
@@ -199,39 +246,71 @@ export default function CreateEvent(){
                             Verification Documents
                             <span className="text-red-500 ml-1">*</span>
                         </p>
-                        <p className="text-xs text-gray-400 mb-3">
-                            Provide at least one document URL. Upload your files to Google Drive or similar and paste the link.
+                        <p className="text-xs text-gray-400 mb-4">
+                            Upload at least one document. Accepted: JPG, PNG, PDF (max 5MB each).
                         </p>
 
                         <div className="mb-3">
                             <label className="block text-xs text-gray-500 mb-1">🪪 ID Card URL</label>
-                            <input
-                                type="url"
-                                name="idCardUrl"
-                                value={formData.idCardUrl}
-                                onChange={handleChange}
-                                className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="https://drive.google.com/..."
-                            />
+                            {idCardUrl ? (
+                                <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded px-3 py-2">
+                                    <span className="text-green-600 text-xs flex-1">✅ Upload successfully</span>
+                                    <a href={idCardUrl} target="_blank" rel="noreferrer"
+                                        className="text-blue-600 text-xs hover:underline">View</a>
+                                    <button type={"button"} onClick={() => setIdCardUrl('')}
+                                        className="text-red-400 text-xs hover:text-red-600">Remove</button>
+                                </div>
+                            ) :(
+                                <label className={`flex items-center justify-center gap-2 border-2 border-dashed rounded-lg px-4 py-3 cursor-pointer transition ${idCardUploading ? 'border-blue-300 bg-blue-50' : 'border-gray-300 hover: border-blue-400 hover:bg-blue-50'}`}>
+                                    <input
+                                        type="file"
+                                        accept=".jpg, .jpeg, .png, .pdf"
+                                        className="hidden"
+                                        onChange={(e) => handleFileUpload(e, 'idCard')}
+                                        disabled={idCardUploading}
+                                    />
+                                    {idCardUploading ?(
+                                        <span className="text-blue-600 text-sm">Uploading...</span>
+                                    ) : (
+                                        <span className='text-gray-500 text-sm'>Click to upload ID Card</span>
+                                    )}
+                                </label>
+                            )}
                         </div>
 
                         <div className="mb-3">
                             <label className="block text-xs text-gray-500 mb-1">📄 Permission Letter URL</label>
-                            <input
-                                type="url"
-                                name="permissionLetterUrl"
-                                value={formData.permissionLetterUrl}
-                                onChange={handleChange}
-                                className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="https://drive.google.com/..."
-                            />
+                            {permissionLetterUrl  ? (
+                                <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded px-3 py-2">
+                                    <span className="text-green-600 text-xs flex-1">✅ Upload successfully</span>
+                                    <a href={permissionLetterUrl} target="_blank" rel="noreferrer"
+                                       className="text-blue-600 text-xs hover:underline">View</a>
+                                    <button type={"button"} onClick={() => setPermissionLetterUrl('')}
+                                            className="text-red-400 text-xs hover:text-red-600">Remove</button>
+                                </div>
+                            ) :(
+                                <label className={`flex items-center justify-center gap-2 border-2 border-dashed rounded-lg px-4 py-3 cursor-pointer transition ${permissionLetterUploading ? 'border-blue-300 bg-blue-50' : 'border-gray-300 hover: border-blue-400 hover:bg-blue-50'}`}>
+                                    <input
+                                        type="file"
+                                        accept=".jpg, .jpeg, .png, .pdf"
+                                        className="hidden"
+                                        onChange={(e) => handleFileUpload(e, 'permission')}
+                                        disabled={permissionLetterUploading}
+                                    />
+                                    {permissionLetterUploading ?(
+                                        <span className="text-blue-600 text-sm">Uploading...</span>
+                                    ) : (
+                                        <span className='text-gray-500 text-sm'>Click to upload Permission Letter</span>
+                                    )}
+                                </label>
+                            )}
                         </div>
 
                     </div>
 
                     <button
                         type="submit"
-                        disabled={loading}
+                        disabled={loading || idCardUploading || permissionLetterUploading}
                         className="w-full bg-blue-600 text-white py-2 rounded font-medium hover:bg-blue-700 disabled:opacity-50"
                     >
                         {loading ? 'Submitting...' : 'Submit for Approval'}
