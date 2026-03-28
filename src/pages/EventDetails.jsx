@@ -24,7 +24,7 @@ export default function EventDetails(){
 
     const handleRegister = async () => {
         if(!user){
-            navigate('login')
+            navigate('/login')
             return
         }
 
@@ -53,7 +53,22 @@ export default function EventDetails(){
     const isFull = event.registeredCount >= event.capacity
     const isExpired = new Date() > new Date(event.registrationDeadline)
     const isCancelled = event.status === 'CANCELLED'
-    const canRegister = !isFull && !isExpired && !isCancelled && user?.role === 'STUDENT'
+    const isRejected = event.status === 'REJECTED'
+    const canRegister = !isFull && !isExpired && !isCancelled && !isRejected && user?.role === 'USER'
+
+    const statusStyles = {
+        APPROVED: 'bg-green-100 text-green-700',
+        PENDING_APPROVAL: 'bg-yellow-100 text-yellow-700',
+        REJECTED: 'bg-red-100 text-red-700',
+        CANCELLED: 'bg-gray-100 text-gray-700',
+    }
+
+    const statusLabel = {
+        APPROVED: '✅ Approved',
+        PENDING_APPROVAL: '⏳ Pending Approval',
+        REJECTED: '🚫 Rejected',
+        CANCELLED: '❌ Cancelled',
+    }
 
     return(
         <div className="max-w-3xl mx-auto">
@@ -66,12 +81,8 @@ export default function EventDetails(){
             <div className="bg-white rounded-b-lg shadow-md px-8 py-6">
                 
                 <div className="mb-6">
-                    <span className={`text-sm px-3 py-1 rounded-full font-medium ${
-                        event.status === 'ACTIVE'
-                        ? 'bg-green-100 text-green-700'
-                        : 'bg-red-100 text-red-700'
-                    }`}>
-                        {event.status}
+                    <span className={`text-sm px-3 py-1 rounded-full font-medium ${statusStyles[event.status]}}`}>
+                        {statusLabel[event.status]}
                     </span>
                 </div>
 
@@ -109,7 +120,7 @@ export default function EventDetails(){
                         <div className="mt-2 bg-gray-200 rounded-full h-2">
                             <div
                                 className="bg-blue-600 rounded-full h-2"
-                                style={{width: `${(event.registeredCount / event.capacity) * 100}%` }} 
+                                style={{width: `${Math.min((event.registeredCount / event.capacity) * 100, 100)}%` }}
                             />
                         </div>
                     </div>
@@ -136,7 +147,7 @@ export default function EventDetails(){
                     </button>
                 )}
 
-                {user?.role === 'STUDENT' && (
+                {user?.role === 'USER' && (
                     <button
                         onClick={handleRegister}
                         disabled={!canRegister || registering}
@@ -150,8 +161,15 @@ export default function EventDetails(){
                          isFull ? 'Event Full':
                          isExpired ? 'Registration Closed':
                          isCancelled ? 'Event Cancelled':
+                         isRejected ? 'Event Rejected':
                          'Register for this Event'}
                     </button>
+                )}
+
+                {user?.role === 'ADMIN' &&(
+                    <div className="bg-yellow-50 text-yellow-700 text-sm p-3 rounded-lg text-center">
+                        👤 Admins cannot register for events
+                    </div>
                 )}
 
             </div>

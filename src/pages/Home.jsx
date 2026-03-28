@@ -58,12 +58,8 @@ export default function Home(){
                             </div>
 
                             <div className="mt-4 flex items-center justify-between">
-                                <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                                    event.status === 'ACTIVE'
-                                    ? 'bg-green-100 text-green-700'
-                                    : 'bg-red-100 text-red-700'
-                                }`}>
-                                    {event.status}
+                                <span className="text-xs px-2 py-1 rounded-full font-medium bg-green-100 text-green-700">
+                                    ✅ Approved
                                 </span>
 
                                 <Link
