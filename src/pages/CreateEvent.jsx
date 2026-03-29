@@ -79,8 +79,8 @@ export default function CreateEvent(){
                 idCardUrl,
                 permissionLetterUrl,
                 capacity: parseInt(formData.capacity),
-                eventDate: formData.eventDate + ':00',
-                registrationDeadline: formData.registrationDeadline + ':00'
+                eventDate: formData.eventDate ? formData.eventDate + ':00' : null,
+                registrationDeadline: formData.registrationDeadline ? formData.registrationDeadline + ':00' :null
             })
             setSubmitted(true)
         }catch (err){
@@ -261,7 +261,7 @@ export default function CreateEvent(){
                                         className="text-red-400 text-xs hover:text-red-600">Remove</button>
                                 </div>
                             ) :(
-                                <label className={`flex items-center justify-center gap-2 border-2 border-dashed rounded-lg px-4 py-3 cursor-pointer transition ${idCardUploading ? 'border-blue-300 bg-blue-50' : 'border-gray-300 hover: border-blue-400 hover:bg-blue-50'}`}>
+                                <label className={`flex items-center justify-center gap-2 border-2 border-dashed rounded-lg px-4 py-3 cursor-pointer transition ${idCardUploading ? 'border-blue-300 bg-blue-50' : 'border-gray-300 hover:border-blue-400 hover:bg-blue-50'}`}>
                                     <input
                                         type="file"
                                         accept=".jpg, .jpeg, .png, .pdf"
@@ -289,7 +289,7 @@ export default function CreateEvent(){
                                             className="text-red-400 text-xs hover:text-red-600">Remove</button>
                                 </div>
                             ) :(
-                                <label className={`flex items-center justify-center gap-2 border-2 border-dashed rounded-lg px-4 py-3 cursor-pointer transition ${permissionLetterUploading ? 'border-blue-300 bg-blue-50' : 'border-gray-300 hover: border-blue-400 hover:bg-blue-50'}`}>
+                                <label className={`flex items-center justify-center gap-2 border-2 border-dashed rounded-lg px-4 py-3 cursor-pointer transition ${permissionLetterUploading ? 'border-blue-300 bg-blue-50' : 'border-gray-300 hover:border-blue-400 hover:bg-blue-50'}`}>
                                     <input
                                         type="file"
                                         accept=".jpg, .jpeg, .png, .pdf"

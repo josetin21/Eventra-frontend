@@ -5,39 +5,63 @@ import {Link} from "react-router-dom";
 export default function MyEvents() {
     const [events, setEvents] = useState([])
     const [loading, setLoading] = useState(true)
+    const [cancellingId, setCancellingId] = useState(null)
+    const [message, setMessage] = useState('')
+
+   const fetchMyEvents = () =>{
+       api.get(`/events/my`)
+           .then(res => setEvents(res.data))
+           .catch(err => console.error(err))
+           .finally(() => setLoading(false))
+   }
 
     useEffect(() => {
-        api.get(`/events/my`)
-            .then(res => setEvents(res.data))
-            .catch(err => console.error(err))
-            .then(() => setLoading(false))
+        fetchMyEvents()
     }, [])
 
-    if (loading) return(
+    const handleCancel = async (id) =>{
+        if (!window.confirm('Are you sure you want to cancel this event?')) return
+        setCancellingId(id)
+
+        try{
+            await api.delete(`/events/${id}`)
+            setMessage('Event cancelled successfully.')
+            setEvents(prev => prev.map(e =>
+                e.id === id ? {...e, status: 'CANCELLED'} : e
+            ))
+        } catch (err){
+            setMessage(err.response?.data?.message || 'Failed to cancel event.')
+        } finally {
+            setCancellingId(null)
+        }
+    }
+
+    if (loading) return (
         <div className="text-center py-20 text-gray-500">Loading your events...</div>
     )
 
     if (events.length === 0) return (
         <div className="text-center py-20 text-gray-500">
-            <p className="text-xl mb-2">You haven't created any events yet.</p>
+            <p className="text-5xl mb-4">📋</p>
+            <p className="text-xl font-medium mb-2">No events yet</p>
             <Link to="/create-event" className="text-blue-600 hover:underline text-sm">
                 Create your first event →
             </Link>
         </div>
     )
 
-    const statusStyles = {
-        ACTIVE: 'bg-green-100 text-green-700',
-        PENDING_APPROVAL: 'bg-yellow-100 text-yellow-700',
-        CANCELLED: 'bg-red-100 text-red-700',
-        COMPLETED: 'bg-gray-100 text-gray-700',
+    const statusStyles ={
+        APPROVED: "bg-green-100 text-green-700",
+        PENDING_APPROVAL: "bg-yellow-100 text-yellow-700",
+        REJECTED: "bg-red-100 text-red-700",
+        CANCELLED: "bg-gray-100 text-gray-600",
     }
 
-    const statusLabels = {
-        ACTIVE: 'Active',
-        PENDING_APPROVAL: 'Pending Approval',
-        CANCELLED: 'Cancelled',
-        COMPLETED: 'Completed',
+    const statusLabels ={
+        APPROVED: "✅ Approved",
+        PENDING_APPROVAL: "⏳ Pending Approval",
+        REJECTED: "🚫 Rejected",
+        CANCELLED: "❌ Cancelled",
     }
 
     return (
@@ -52,6 +76,12 @@ export default function MyEvents() {
                     + Create Event
                 </Link>
             </div>
+
+            {message &&(
+                <div className="mb-6 p-4 bg-blue-50 text-blue-700 rounded-lg text-sm font-medium">
+                    {message}
+                </div>
+            )}
 
             <div className="space-y-4">
                 {events.map(event =>(
@@ -74,47 +104,65 @@ export default function MyEvents() {
 
                         <p className="text-gray-600 text-sm mb-4">{event.description}</p>
 
-                        {event.status === 'CANCELLED' && event.rejectionReason && (
+                        {event.status === 'REJECTED' && event.rejectionReason && (
                             <div className="bg-red-50 text-red-600 text-sm p-3 rounded mb-4">
                                 <span className="font-medium">Rejection reason: </span>
                                 {event.rejectionReason}
                             </div>
                         )}
 
-                        {event.status === 'ACTIVE' && (
-                            <div className="flex items-center gap-6 text-sm text-gray-600 mb-4">
-                                <span>👥 {event.registeredCount} / {event.capacity} registered</span>
+                        {event.status === 'APPROVED' && (
+                            <div className="mb-4">
+                                <div className="flex justify-between text-xs text-gray-500 mb-1">
+                                    <span>Registration</span>
+                                    <span>{event.registeredCount} / {event.capacity}</span>
+                                </div>
+                                <div className="bg-gray-200 rounded-full h-2">
+                                    <div
+                                        className="bg-blue-600 rounded-full h-2"
+                                        style={{ width: `${Math.min((event.registeredCount / event.capacity) * 100, 100)}%` }}
+                                    />
+                                </div>
                             </div>
                         )}
 
-                        {event.status === 'ACTIVE' && (
-                            <div className="flex gap-3">
+                        <div>
+                            {event.status === 'APPROVED' && (
                                 <Link
                                     to={`/scan-qr?eventId=${event.id}`}
                                     className="bg-blue-600 text-white px-4 py-2 rounded text-sm font-medium hover:bg-blue-700"
                                 >
-                                    📷 Scan QR / Open Session
+                                    📷 Scan QR / Attendance
                                 </Link>
-                                <Link
-                                    to={`/events/${event.id}`}
-                                    className="border border-gray-300 text-gray-700 px-4 py-2 rounded text-sm font-medium hover:bg-gray-50"
+                            )}
+
+                            <Link
+                                to={`/events/${event.id}`}
+                                className="border border-gray-300 text-gray-700 px-4 py-2 rounded text-sm font-medium hover:bg-gray-50"
+                            >
+                                View Details
+                            </Link>
+
+                            {(event.status === 'APPROVED' || event.status === 'PENDING_APPROVAL') &&(
+                                <button
+                                    onClick={() => handleCancel(event.id)}
+                                    disabled={cancellingId === event.id}
+                                    className="border border-red-200 text-red-600 px-4 py-2 rounded text-sm font-medium hover:bg-red-50 disabled:opacity-50"
                                 >
-                                    View Event
-                                </Link>
-                            </div>
-                        )}
+                                    {cancellingId === event.id ? 'Cancelling...' : 'Cancel Event'}
+                                </button>
+                            )}
 
-                        {event.status === 'PENDING_APPROVAL' && (
-                            <p className="text-yellow-600 text-sm">
-                                ⏳ Your event is under review. Admin will approve or reject it shortly.
-                            </p>
-                        )}
+                            {event.status === 'PENDING_APPROVAL' && (
+                                <p className="text-yellow-600 text-sm">
+                                    ⏳ Your event is under review. Admin will approve or reject it shortly.
+                                </p>
+                            )}
 
+                        </div>
                     </div>
                 ))}
-
             </div>
-
         </div>
     )
 }
