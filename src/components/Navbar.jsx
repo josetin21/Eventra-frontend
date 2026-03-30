@@ -42,9 +42,6 @@ export default function Navbar(){
                         <Link to="/create-event" className='hover:text-blue-200'>
                             Create Event
                         </Link>
-                        <Link to="/scan-qr" className='hover:text-blue-200'>
-                            Scan QR
-                        </Link>
                     </>
                 )}
 

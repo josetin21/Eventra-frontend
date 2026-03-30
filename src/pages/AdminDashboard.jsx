@@ -1,5 +1,6 @@
 import api from "../api/axios.js"
 import {useEffect, useState} from "react";
+import {Link} from "react-router-dom";
 
 export default function AdminDashboard(){
     const [stats, setStats] = useState(null)
@@ -46,17 +47,17 @@ export default function AdminDashboard(){
             <div className="bg-white rounded-lg shadow-md p-6">
                 <h2 className="text-xl font-bold text-gray-800 mb-4">Quick Actions</h2>
                 <div className="flex gap-4">
-                    <a
-                        href="/organizer-requests"
-                        className="bg-blue-600 text-white px-4 py-2 rounded font-medium hover:bg-blue-700"
+                    <Link
+                        to="/pending-events"
+                        className='bg-blue-600 text-white px-4 py-2 rounded font-medium hover:bg-blue-700 flex items-center gap-2'
                     >
-                        View Organizer Requests
-                        {stats.pendingOrganizerRequests > 0 &&(
-                            <span className="ml-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
-                                {stats.pendingOrganizerRequests}
+                        Review Pending Events
+                        {stats.pendingApprovals > 0 &&(
+                            <span className='bg-red-500 text-white text-xs px-2 py-0.5 rounded-full'>
+                                {stats.pendingApprovals}
                             </span>
                         )}
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>
