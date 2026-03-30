@@ -28,7 +28,7 @@ export default function AdminDashboard(){
         {label: 'Total Attendance', value: stats.totalAttendance, color: 'text-orange-600'},
         {label: 'Active Events', value: stats.activeEvents, color: 'text-teal-600'},
         {label: 'Cancelled Events', value: stats.cancelledEvents, color: 'text-red-600'},
-        {label: 'Pending Requests', value: stats.pendingEventApprovals, color: 'text-yellow-600'},
+        {label: 'Pending Approvals', value: stats.pendingEventApprovals, color: 'text-yellow-600'},
     ]
 
     return (

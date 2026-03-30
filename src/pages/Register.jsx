@@ -26,7 +26,7 @@ export default function Register(){
         setLoading(true)
 
         try{
-            await api.post('auth/register',{
+            await api.post('/auth/register',{
                 ...formData,
                 year: parseInt(formData.year)
             })

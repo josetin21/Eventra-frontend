@@ -8,7 +8,7 @@ export async function uploadToCloudinary(file){
     formData.append('folder', 'eventra')
 
     const response = await fetch(
-        `http://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`,
+        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`,
         {
             method: 'POST',
             body: formData

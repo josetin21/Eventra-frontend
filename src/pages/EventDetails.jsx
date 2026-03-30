@@ -81,7 +81,7 @@ export default function EventDetails(){
             <div className="bg-white rounded-b-lg shadow-md px-8 py-6">
                 
                 <div className="mb-6">
-                    <span className={`text-sm px-3 py-1 rounded-full font-medium ${statusStyles[event.status]}}`}>
+                    <span className={`text-sm px-3 py-1 rounded-full font-medium ${statusStyles[event.status]}`}>
                         {statusLabel[event.status]}
                     </span>
                 </div>
