@@ -158,7 +158,7 @@ export default function ScanQR() {
 
     const formatDate = (dateStr) => {
         if (!dateStr) return ''
-        return new Date(dateStr.replace('T', '')).toLocaleTimeString('en-IN',{
+        return new Date(dateStr.replace('T', ' ')).toLocaleTimeString('en-IN',{
             hour:'2-digit', minute:'2-digit'
         })
     }
@@ -207,7 +207,7 @@ export default function ScanQR() {
                             <button
                                 onClick={openSession}
                                 disabled={sessionLoading}
-                                className='bg-blue-600 text-white px-6 rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50'
+                                className='bg-blue-600 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50'
                             >
                                 {sessionLoading ? 'Opening...' : '▶ Open Session'}
                             </button>
