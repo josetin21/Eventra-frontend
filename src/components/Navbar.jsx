@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import {Link, NavLink, useNavigate} from 'react-router-dom';
 import { useAuth } from "../context/AuthContext"
 
 export default function Navbar(){
@@ -10,6 +10,12 @@ export default function Navbar(){
         Navigate('/login')
     }
 
+    const navLinkClass = ({ isActive }) =>
+        `px-3 py-1 rounded-md transition ${
+            isActive
+                ? "bg-white text-blue-700 shadow-sm"
+                : "text-white hover:bg-blue-500/40 hover:text-white"
+        }`;
     return(
         <nav className='bg-blue-600 text-white px-6 py-4 flex items-center justify-between'>
 
@@ -19,40 +25,40 @@ export default function Navbar(){
 
             <div className='flex items-center gap-6 text-sm font-medium'>
 
-                <Link to="/" className='hover:text-blue-200'>Events</Link>
+                <NavLink to="/" className={navLinkClass} end>Events</NavLink>
 
                 {!user &&(
                     <>
-                        <Link to="/login" className='hover:text-blue-200'>Login</Link>
-                        <Link to="/register" className='hover:text-blue-200'>Register</Link>
+                        <NavLink to="/login" className={navLinkClass}>Login</NavLink>
+                        <NavLink to="/register" className={navLinkClass}>Register</NavLink>
                     </>
                 )}
 
                 {user &&(
                     <>
-                        <Link to="/my-registrations" className='hover:text-blue-200'>
+                        <NavLink to="/my-registrations" className={navLinkClass}>
                             My Registrations
-                        </Link>
-                        <Link to="/my-events" className='hover:text-blue-200'>
+                        </NavLink>
+                        <NavLink to="/my-events" className={navLinkClass}>
                             My Events
-                        </Link>
-                        <Link to="/my-attendance" className='hover:text-blue-200'>
+                        </NavLink>
+                        <NavLink to="/my-attendance" className={navLinkClass}>
                             My Attendance
-                        </Link>
-                        <Link to="/create-event" className='hover:text-blue-200'>
+                        </NavLink>
+                        <NavLink to="/create-event" className={navLinkClass}>
                             Create Event
-                        </Link>
+                        </NavLink>
                     </>
                 )}
 
                 {user?.role === 'ADMIN' &&(
                     <>
-                       <Link to="/admin-dashboard" className='hover:text-blue-200'>
+                       <NavLink to="/admin-dashboard" className={navLinkClass}>
                             Dashboard
-                        </Link>
-                        <Link to="/pending-events" className='hover:text-blue-200'>
+                        </NavLink>
+                        <NavLink to="/pending-events" className={navLinkClass}>
                             Approvals
-                        </Link>
+                        </NavLink>
                     </>
                 )}
 
