@@ -1,5 +1,5 @@
 import api from '../api/axios.js'
-import {useEffect, useState} from "react";
+import {useEffect, useState, } from "react";
 import {Link} from "react-router-dom";
 
 export default function MyEvents() {
@@ -7,6 +7,8 @@ export default function MyEvents() {
     const [loading, setLoading] = useState(true)
     const [cancellingId, setCancellingId] = useState(null)
     const [message, setMessage] = useState('')
+
+    const [tab, setTab] = useState('APPROVED')
 
    const fetchMyEvents = () =>{
        api.get(`/events/my`)
@@ -18,6 +20,38 @@ export default function MyEvents() {
     useEffect(() => {
         fetchMyEvents()
     }, [])
+
+    const filteredEvents =
+        tab === 'ALL' ? events : events.filter(e => e.status === tab)
+
+    const STATUS_TABS = [
+        { key: 'APPROVED', label: 'Active' },
+        { key: 'PENDING_APPROVAL', label: 'Pending' },
+        { key: 'REJECTED', label: 'Rejected' },
+        { key: 'CANCELLED', label: 'Cancelled' },
+        { key: 'ALL', label: 'All' },
+    ]
+
+    const tabClass = (active) =>
+        `px-4 py-2 rounded-md text-sm font-medium border transition ${
+            active
+                ? "bg-blue-600 text-white border-blue-600"
+                : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
+        }`
+
+    if (loading) return (
+        <div className="text-center py-20 text-gray-500">Loading your events...</div>
+    )
+
+    if (events.length === 0) return (
+        <div className="text-center py-20 text-gray-500">
+            <p className="text-5xl mb-4">📋</p>
+            <p className="text-xl font-medium mb-2">No events yet</p>
+            <Link to="/create-event" className="text-blue-600 hover:underline text-sm">
+                Create your first event →
+            </Link>
+        </div>
+    )
 
     const handleCancel = async (id) =>{
         if (!window.confirm('Are you sure you want to cancel this event?')) return
@@ -36,19 +70,6 @@ export default function MyEvents() {
         }
     }
 
-    if (loading) return (
-        <div className="text-center py-20 text-gray-500">Loading your events...</div>
-    )
-
-    if (events.length === 0) return (
-        <div className="text-center py-20 text-gray-500">
-            <p className="text-5xl mb-4">📋</p>
-            <p className="text-xl font-medium mb-2">No events yet</p>
-            <Link to="/create-event" className="text-blue-600 hover:underline text-sm">
-                Create your first event →
-            </Link>
-        </div>
-    )
 
     const statusStyles ={
         APPROVED: "bg-green-100 text-green-700",
@@ -77,6 +98,18 @@ export default function MyEvents() {
                 </Link>
             </div>
 
+            <div className="flex flex-wrap gap-3 mb-6">
+                {STATUS_TABS.map(t => (
+                    <button
+                        key={t.key}
+                        onClick={() => setTab(t.key)}
+                        className={tabClass(tab === t.key)}
+                    >
+                        {t.label}
+                    </button>
+                ))}
+            </div>
+
             {message &&(
                 <div className="mb-6 p-4 bg-blue-50 text-blue-700 rounded-lg text-sm font-medium">
                     {message}
@@ -84,7 +117,7 @@ export default function MyEvents() {
             )}
 
             <div className="space-y-4">
-                {events.map(event =>(
+                {filteredEvents.map(event =>(
                     <div key={event.id} className="bg-white rounded-lg shadow-md p-6">
 
                         <div className="flex items-start justify-between mb-3">
@@ -111,26 +144,11 @@ export default function MyEvents() {
                             </div>
                         )}
 
-                        {event.status === 'APPROVED' && (
-                            <div className="mb-4">
-                                <div className="flex justify-between text-xs text-gray-500 mb-1">
-                                    <span>Registration</span>
-                                    <span>{event.registeredCount} / {event.capacity}</span>
-                                </div>
-                                <div className="bg-gray-200 rounded-full h-2">
-                                    <div
-                                        className="bg-blue-600 rounded-full h-2"
-                                        style={{ width: `${Math.min((event.registeredCount / event.capacity) * 100, 100)}%` }}
-                                    />
-                                </div>
-                            </div>
-                        )}
-
-                        <div>
+                        <div className="flex flex-wrap items-center gap-3">
                             {event.status === 'APPROVED' && (
                                 <Link
                                     to={`/scan-qr?eventId=${event.id}`}
-                                    className="bg-blue-600 text-white px-4 py-2 rounded text-sm font-medium hover:bg-blue-700"
+                                    className="inline-flex items-center justify-center bg-blue-600 text-white px-4 py-2 rounded text-sm font-medium hover:bg-blue-700 h-10"
                                 >
                                     📷 Scan QR / Attendance
                                 </Link>
@@ -138,16 +156,16 @@ export default function MyEvents() {
 
                             <Link
                                 to={`/events/${event.id}`}
-                                className="border border-gray-300 text-gray-700 px-4 py-2 rounded text-sm font-medium hover:bg-gray-50"
+                                className="inline-flex items-center justify-center border border-gray-300 text-gray-700 px-4 py-2 rounded text-sm font-medium hover:bg-gray-50 h-10"
                             >
                                 View Details
                             </Link>
 
-                            {(event.status === 'APPROVED' || event.status === 'PENDING_APPROVAL') &&(
+                            {(event.status === 'APPROVED' || event.status === 'PENDING_APPROVAL') && (
                                 <button
                                     onClick={() => handleCancel(event.id)}
                                     disabled={cancellingId === event.id}
-                                    className="border border-red-200 text-red-600 px-4 py-2 rounded text-sm font-medium hover:bg-red-50 disabled:opacity-50"
+                                    className="inline-flex items-center justify-center border border-red-200 text-red-600 px-4 py-2 rounded text-sm font-medium hover:bg-red-50 disabled:opacity-50 h-10"
                                 >
                                     {cancellingId === event.id ? 'Cancelling...' : 'Cancel Event'}
                                 </button>
