@@ -12,6 +12,7 @@ import AdminDashboard from './pages/AdminDashboard'
 import MyEvents from './pages/MyEvents.jsx'
 import PendingEvents from './pages/PendingEvents.jsx'
 import ScanQR from './pages/ScanQR.jsx'
+import EditEvent from "./pages/EditEvent.jsx";
 
 function ProtectedRoute({ children, roles }) {
   const { user } = useAuth()
@@ -71,6 +72,12 @@ function App() {
           <Route path="/pending-events" element={
               <ProtectedRoute roles={['ADMIN']}>
                   <PendingEvents />
+              </ProtectedRoute>
+          }/>
+
+          <Route path='/events/:id/edit' element={
+              <ProtectedRoute roles={['ADMIN', 'USER']}>
+                  <EditEvent />
               </ProtectedRoute>
           }/>
 
