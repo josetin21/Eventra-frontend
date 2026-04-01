@@ -111,7 +111,7 @@ export default function EditEvent(){
                 </div>
 
                 <p className='text-center text-gray-500 mb-6 text-sm'>
-                    Editing is allowed only for <b>Approved</b> events.
+                    Edit the event information.
                 </p>
 
                 {error &&(
