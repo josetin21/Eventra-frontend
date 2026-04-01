@@ -161,6 +161,16 @@ export default function MyEvents() {
                                 View Details
                             </Link>
 
+
+                            {event.status === 'APPROVED' && (
+                                <Link
+                                    to={`/events/${event.id}/edit`}
+                                    className='inline-flex items-center justify-center border border-blue-200 text-blue-600 px-4 py-2 rounded text-sm font-medium hover:bg-blue-50 h-10'
+                                >
+                                    ✏️ Edit
+                                </Link>
+                            )}
+
                             {(event.status === 'APPROVED' || event.status === 'PENDING_APPROVAL') && (
                                 <button
                                     onClick={() => handleCancel(event.id)}
