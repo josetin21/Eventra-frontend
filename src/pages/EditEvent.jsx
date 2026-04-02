@@ -22,6 +22,7 @@ export default function EditEvent(){
     const [error, setError] = useState('')
     const [loadingEvent, setLoadingEvent] = useState(true)
     const [saving, setSaving] = useState(false)
+    const [notifyRegistrants, setNotifyRegistrants] = useState(false)
 
     const toDateTimeLocal = (backendDateTime) =>{
         if (!backendDateTime) return''
@@ -78,6 +79,7 @@ export default function EditEvent(){
                 ...formData,
                 idCardUrl,
                 permissionLetterUrl,
+                notifyRegistrants,
 
                 capacity: parseInt(formData.capacity),
                 eventDate: formData.eventDate ? formData.eventDate + ':00' : null,
@@ -209,6 +211,15 @@ export default function EditEvent(){
                                 required
                             />
                         </div>
+
+                        <label className='flex items-center gap-2 text-sm text-orange-700 mb-4'>
+                            <input
+                                type='checkbox'
+                                checked={notifyRegistrants}
+                                onChange={(e) => setNotifyRegistrants(e.target.checked)}
+                            />
+                            Notify registered users about this update
+                        </label>
 
                         <button
                             type="submit"
