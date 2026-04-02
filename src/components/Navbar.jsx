@@ -43,7 +43,7 @@ export default function Navbar(){
                             My Events
                         </NavLink>
                         <NavLink to="/my-attendance" className={navLinkClass}>
-                            My Attendance
+                            My Participation
                         </NavLink>
                         <NavLink to="/create-event" className={navLinkClass}>
                             Create Event

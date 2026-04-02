@@ -6,7 +6,7 @@ import Register from './pages/Register'
 import Home from './pages/Home'
 import EventDetails from './pages/EventDetails'
 import MyRegistrations from './pages/MyRegistrations' 
-import MyAttendance from './pages/MyAttendance'
+import MyParticipation from './pages/MyParticipation.jsx'
 import CreateEvent from './pages/CreateEvent'
 import AdminDashboard from './pages/AdminDashboard'
 import MyEvents from './pages/MyEvents.jsx'
@@ -41,7 +41,7 @@ function App() {
 
           <Route path="/my-attendance" element={
             <ProtectedRoute roles={['USER', 'ADMIN']}>
-              <MyAttendance/>
+              <MyParticipation/>
             </ProtectedRoute>
           } />
 

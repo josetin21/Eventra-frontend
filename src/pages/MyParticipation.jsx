@@ -2,7 +2,7 @@ import { useState,useEffect } from "react";
 import api from '../api/axios'
 
 
-export default function MyAttendance(){
+export default function MyParticipation(){
     const [attendance, setAttendance] = useState([])
     const [loading, setLoading] = useState(true)
 
