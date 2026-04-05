@@ -8,6 +8,7 @@ export default function EventRegistrants(){
     const [registrants, setRegistrants] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
+    const [eventTitle, setEventTitle] = useState('')
 
     const [openDownload, setOpenDownload] = useState(false)
 
@@ -28,6 +29,18 @@ export default function EventRegistrants(){
     useEffect(() => {
         fetchRegistrants()
     }, [eventId])
+
+    useEffect(() => {
+        const fetchEventTitle = async () =>{
+            try {
+                const res = await api.get(`/events/${eventId}`)
+                setEventTitle(res.data?.title || '')
+            } catch (err) {
+                setEventTitle('')
+            }
+        }
+        if (eventId) fetchEventTitle()
+    }, []);
 
     useEffect(() => {
         const handler = (e) =>{
@@ -53,12 +66,21 @@ export default function EventRegistrants(){
         window.URL.revokeObjectURL(url)
     }
 
+    const safeFileName = (value) =>
+        String(value || "")
+            .trim()
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/(^-|-$)/g, "");
+
+    const fileBase = safeFileName(eventTitle) || `event-${eventId}`
+
     const handleDownloadCsv = async () =>{
         try{
             const res = await api.get(`/events/${eventId}/registrants/export/csv`, {
                 responseType: 'blob',
             })
-            downloadFile(res.data, `event-${eventId}-registrants.csv`)
+            downloadFile(res.data, `event-${fileBase}-registrants.csv`)
         } catch (err){
             alert(err.response?.data?.message || 'CSV download failed')
         }
@@ -69,7 +91,7 @@ export default function EventRegistrants(){
             const res = await api.get(`/events/${eventId}/registrants/export/xlsx`, {
                 responseType: 'blob',
             })
-            downloadFile(res.data, `event-${eventId}-registrants.xlsx`)
+            downloadFile(res.data, `event-${fileBase}-registrants.xlsx`)
         } catch (err){
             alert(err.response?.data?.message || 'XLSX download failed')
         }
@@ -88,7 +110,9 @@ export default function EventRegistrants(){
             <div className='w-full flex items-center justify-between'>
                 <div>
                     <h1 className='text-3xl font-bold text-gray-800'>Event Registrants</h1>
-                    <p className='text-sm text-gray-500 mt-1'>Event ID: {eventId}</p>
+                    <p className='text-sm text-gray-500 mt-1'>
+                        {eventTitle ? `Event: ${eventTitle}` : `Event ID: ${eventId} `}
+                    </p>
                 </div>
 
                 <div className='flex gap-2 items-center'>
