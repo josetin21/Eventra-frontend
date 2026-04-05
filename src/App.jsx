@@ -13,6 +13,7 @@ import MyEvents from './pages/MyEvents.jsx'
 import PendingEvents from './pages/PendingEvents.jsx'
 import ScanQR from './pages/ScanQR.jsx'
 import EditEvent from "./pages/EditEvent.jsx";
+import EventRegistrants from "./pages/EventRegistrants.jsx";
 
 function ProtectedRoute({ children, roles }) {
   const { user } = useAuth()
@@ -32,6 +33,15 @@ function App() {
           <Route path="/login" element={<Login/>}/>
           <Route path="/register" element={<Register/>} />
           <Route path="/events/:id" element={<EventDetails/>} />
+
+
+          <Route path='/events/:id/registrants' element={
+              <ProtectedRoute roles={['USER', 'ADMIN']}>
+                  <EventRegistrants />
+              </ProtectedRoute>
+          }
+
+          />
 
           <Route path="/my-registrations" element={
             <ProtectedRoute roles={['USER', 'ADMIN']}>

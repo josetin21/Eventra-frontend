@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import {Link, useParams, useNavigate} from "react-router-dom";
 import { useAuth } from '../context/AuthContext'
 import api from './../api/axios';
 
 
 export default function EventDetails(){
-    const {id} = useParams()
+    const { id } = useParams()
     const {user} = useAuth()
     const navigate = useNavigate()
 
@@ -56,19 +56,6 @@ export default function EventDetails(){
     const isRejected = event.status === 'REJECTED'
     const canRegister = !isFull && !isExpired && !isCancelled && !isRejected && user?.role === 'USER'
 
-    const statusStyles = {
-        APPROVED: 'bg-green-100 text-green-700',
-        PENDING_APPROVAL: 'bg-yellow-100 text-yellow-700',
-        REJECTED: 'bg-red-100 text-red-700',
-        CANCELLED: 'bg-gray-100 text-gray-700',
-    }
-
-    const statusLabel = {
-        APPROVED: '✅ Approved',
-        PENDING_APPROVAL: '⏳ Pending Approval',
-        REJECTED: '🚫 Rejected',
-        CANCELLED: '❌ Cancelled',
-    }
 
     return(
         <div className="max-w-3xl mx-auto">
@@ -79,12 +66,6 @@ export default function EventDetails(){
             </div>
 
             <div className="bg-white rounded-b-lg shadow-md px-8 py-6">
-                
-                <div className="mb-6">
-                    <span className={`text-sm px-3 py-1 rounded-full font-medium ${statusStyles[event.status]}`}>
-                        {statusLabel[event.status]}
-                    </span>
-                </div>
 
                 <p className="text-gray-700 mb-6">{event.description}</p>
 
@@ -135,6 +116,17 @@ export default function EventDetails(){
                 {error && (
                     <div className="bg-red-50 text-red-700 rounded-lg mb-4">
                         {error}
+                    </div>
+                )}
+
+                {user?.role === 'USER' &&(
+                    <div className='mb-4'>
+                        <Link
+                            to={`/events/${id}/registrants`}
+                            className="inline-flex items-center justify-center w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-50"
+                        >
+                            👥 View Registrants / Download
+                        </Link>
                     </div>
                 )}
 

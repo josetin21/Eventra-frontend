@@ -162,6 +162,7 @@ export default function MyEvents() {
                             </Link>
 
 
+
                             {event.status === 'APPROVED' && (
                                 <Link
                                     to={`/events/${event.id}/edit`}
@@ -183,7 +184,7 @@ export default function MyEvents() {
 
                             {event.status === 'PENDING_APPROVAL' && (
                                 <p className="text-yellow-600 text-sm">
-                                    ⏳ Your event is under review. Admin will approve or reject it shortly.
+                                    ⏳ Your event is under review. Admin will approve it shortly.
                                 </p>
                             )}
 
