@@ -14,6 +14,9 @@ import PendingEvents from './pages/PendingEvents.jsx'
 import ScanQR from './pages/ScanQR.jsx'
 import EditEvent from "./pages/EditEvent.jsx";
 import EventRegistrants from "./pages/EventRegistrants.jsx";
+import Profile from "./pages/Profile.jsx";
+import EditProfile from "./pages/EditProfile.jsx";
+import ChangePassword from "./pages/ChangePassword.jsx";
 
 function ProtectedRoute({ children, roles }) {
   const { user } = useAuth()
@@ -90,6 +93,24 @@ function App() {
                   <EditEvent />
               </ProtectedRoute>
           }/>
+
+            <Route path='/profile' element={
+              <ProtectedRoute roles={['ADMIN', 'USER']}>
+                  <Profile />
+              </ProtectedRoute>
+            }/>
+
+            <Route path='/profile/edit' element={
+              <ProtectedRoute roles={['ADMIN', 'USER']}>
+                  <EditProfile />
+              </ProtectedRoute>
+            }/>
+
+            <Route path='/profile/change-password' element={
+              <ProtectedRoute roles={['ADMIN', 'USER']}>
+                  <ChangePassword />
+              </ProtectedRoute>
+            }/>
 
         </Routes>
       </div>

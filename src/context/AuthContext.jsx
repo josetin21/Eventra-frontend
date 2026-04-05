@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from "react"
 
+
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
@@ -8,7 +9,8 @@ export function AuthProvider({ children }) {
         const role = localStorage.getItem('role')
         const name = localStorage.getItem('name')
         const designation = localStorage.getItem('designation')
-        return token ? { token, role, name, designation } : null
+        const email = localStorage.getItem('email')
+        return token ? { token, role, name, designation, email } : null
     })
 
     const login = (data) =>{
@@ -16,6 +18,7 @@ export function AuthProvider({ children }) {
         localStorage.setItem('role', data.role)
         localStorage.setItem('name', data.name)
         localStorage.setItem('designation', data.designation || '')
+        localStorage.setItem('email', data.email)
         setUser(data)
     }
 
@@ -24,11 +27,22 @@ export function AuthProvider({ children }) {
         localStorage.removeItem('role')
         localStorage.removeItem('name')
         localStorage.removeItem('designation')
+        localStorage.removeItem('email')
         setUser(null)
     }
 
+    const updateUser = (patch) =>{
+        setUser((prev) =>{
+            if (!prev) return prev
+            const next = { ...prev, ...patch }
+            if (next.name !== undefined) localStorage.setItem('name', next.name || '')
+            if (next.email !== undefined) localStorage.setItem('name', next.email || '')
+            return next
+        })
+    }
+
     return(
-        <AuthContext.Provider value={{user, login, logout}}>
+        <AuthContext.Provider value={{user, login, logout, updateUser}}>
             {children}
         </AuthContext.Provider>
     )

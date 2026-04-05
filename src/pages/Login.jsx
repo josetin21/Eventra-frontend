@@ -25,7 +25,8 @@ export default function Login(){
                 token: res.data.token,
                 role: res.data.role,
                 name: res.data.name,
-                designation: res.data.designation
+                designation: res.data.designation,
+                email: res.data.email
             })
 
             const role = res.data.role
