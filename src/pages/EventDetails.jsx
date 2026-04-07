@@ -55,6 +55,7 @@ export default function EventDetails(){
     const isCancelled = event.status === 'CANCELLED'
     const isRejected = event.status === 'REJECTED'
     const canRegister = !isFull && !isExpired && !isCancelled && !isRejected && user?.role === 'USER'
+    const isEventOwner = user && event.organizerId && event.organizerId === Number(user.userId)
 
 
     return(
@@ -119,7 +120,7 @@ export default function EventDetails(){
                     </div>
                 )}
 
-                {user?.role === 'USER' &&(
+                {isEventOwner &&(
                     <div className='mb-4'>
                         <Link
                             to={`/events/${id}/registrants`}

@@ -6,15 +6,17 @@ const AuthContext = createContext(null)
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(() =>{
         const token = localStorage.getItem('token')
+        const userId = localStorage.getItem('userId')
         const role = localStorage.getItem('role')
         const name = localStorage.getItem('name')
         const designation = localStorage.getItem('designation')
         const email = localStorage.getItem('email')
-        return token ? { token, role, name, designation, email } : null
+        return token ? { token, userId, role, name, designation, email } : null
     })
 
     const login = (data) =>{
         localStorage.setItem('token', data.token)
+        localStorage.setItem('userId',data.userId.toString())
         localStorage.setItem('role', data.role)
         localStorage.setItem('name', data.name)
         localStorage.setItem('designation', data.designation || '')
@@ -24,6 +26,7 @@ export function AuthProvider({ children }) {
 
     const logout = () =>{
         localStorage.removeItem('token')
+        localStorage.removeItem('userId')
         localStorage.removeItem('role')
         localStorage.removeItem('name')
         localStorage.removeItem('designation')

@@ -26,7 +26,8 @@ export default function Login(){
                 role: res.data.role,
                 name: res.data.name,
                 designation: res.data.designation,
-                email: res.data.email
+                email: res.data.email,
+                userId : res.data.userId
             })
 
             const role = res.data.role
@@ -34,7 +35,7 @@ export default function Login(){
             else if(role === 'ORGANIZER') navigate('/organizer-dashboard')
             else navigate('/')
         } catch(err){
-            setError("Invalid email or password")
+                setError("Invalid email or password")
         } finally{
             setLoading(false)
         }
