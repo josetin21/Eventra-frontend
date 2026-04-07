@@ -17,6 +17,8 @@ import EventRegistrants from "./pages/EventRegistrants.jsx";
 import Profile from "./pages/Profile.jsx";
 import EditProfile from "./pages/EditProfile.jsx";
 import ChangePassword from "./pages/ChangePassword.jsx";
+import ForgotPassword from "./pages/ForgotPassword.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
 
 function ProtectedRoute({ children, roles }) {
   const { user } = useAuth()
@@ -36,6 +38,8 @@ function App() {
           <Route path="/login" element={<Login/>}/>
           <Route path="/register" element={<Register/>} />
           <Route path="/events/:id" element={<EventDetails/>} />
+          <Route path="/forgot-password" element={<ForgotPassword/>}/>
+          <Route path="/reset-password" element={<ResetPassword/>}/>
 
 
           <Route path='/events/:id/registrants' element={

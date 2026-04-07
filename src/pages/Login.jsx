@@ -111,7 +111,14 @@ export default function Login(){
                     >
                         {loading ? 'Signing in....' : 'Sign In'}
                     </button>
+
                 </form>
+
+                <div className='flex justify-center mt-4 mb-4'>
+                    <Link to='/forgot-password' className='text-sm text-blue-600 hover:underline'>
+                        Forgot password?
+                    </Link>
+                </div>
 
                 <p className="text-center text-sm text-gray-500 mt-4">
                     Don't have an account?{' '}
