@@ -40,6 +40,7 @@ export default function Profile(){
                     <div className='mt-6 space-y-3 text-gray-700'>
                         <div><span className='font-semibold'>Name:</span> {profile.name}</div>
                         <div><span className='font-semibold'>Email:</span> {profile.email}</div>
+                        <div><span className='font-semibold'>Institution:</span> {profile.institutionName}</div>
                         <div><span className='font-semibold'>Department:</span> {profile.department}</div>
                         <div><span className='font-semibold'>Year:</span> {profile.year}</div>
                     </div>

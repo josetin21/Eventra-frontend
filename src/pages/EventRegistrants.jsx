@@ -171,6 +171,7 @@ export default function EventRegistrants(){
                             <tr>
                                 <th className='text-left px-4 py-3 border-b'>Name</th>
                                 <th className='text-left px-4 py-3 border-b'>Email</th>
+                                <th className='text-left px-4 py-3 border-b'>Institution</th>
                                 <th className='text-left px-4 py-3 border-b'>Department</th>
                                 <th className='text-left px-4 py-3 border-b'>Year</th>
                                 <th className='text-left px-4 py-3 border-b'>Designation</th>
@@ -182,6 +183,7 @@ export default function EventRegistrants(){
                                 <tr key={idx} className='hover:bg-gray-50'>
                                     <td className='px-4 py-3 border-b'>{r.name}</td>
                                     <td className='px-4 py-3 border-b'>{r.email}</td>
+                                    <td className='px-4 py-3 border-b'>{r.institutionName ?? ""}</td>
                                     <td className='px-4 py-3 border-b'>{r.department}</td>
                                     <td className='px-4 py-3 border-b'>{r.year ?? ""}</td>
                                     <td className='px-4 py-3 border-b'>{r.designation ?? ""}</td>
@@ -190,7 +192,7 @@ export default function EventRegistrants(){
 
                             {registrants.length === 0 && (
                                 <tr>
-                                    <td className='px-4 py-6 text-center text-gray-500 ' colSpan={5}>
+                                    <td className='px-4 py-6 text-center text-gray-500 ' colSpan={6}>
                                         No registrants yet.
                                     </td>
                                 </tr>

@@ -7,6 +7,7 @@ export default function Register(){
         name: '',
         email: '',
         password: '',
+        institutionName: '',
         department: '',
         year: '',
         designation: 'STUDENT'
@@ -81,6 +82,20 @@ export default function Register(){
                             onChange={handleChange}
                             className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="you@example.com"
+                            required
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Institution Name
+                        </label>
+                        <input
+                            type="text"
+                            name="institutionName"
+                            value={formData.institutionName}
+                            onChange={handleChange}
+                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Your college / university"
                             required
                         />
                     </div>
