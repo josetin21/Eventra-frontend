@@ -32,7 +32,7 @@ function App() {
     <div className="min-h-screen bg-gray-50">
       <NavBar />
 
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <Routes>
           <Route path="/" element={<Home/>} />
           <Route path="/login" element={<Login/>}/>

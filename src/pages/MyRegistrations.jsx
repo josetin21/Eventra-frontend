@@ -26,13 +26,13 @@ export default function MyRegistrations(){
     )
 
     return(
-        <div>
+        <div className='mx-auto w-full max-w-6xl sm:px-6 lg:px-8'>
             <h1 className="text-3xl font-bold text-gray-800 mb-8">My Registration</h1>
 
             {selectedQr && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
                     onClick={() => setSelectedQr(null)}>
-                        <div className="bg-white p-6 rounded-lg text-center" onClick={e => e.stopPropagation()}>
+                        <div className="bg-white p-6 rounded-lg text-center w-[92vw] max-w-sm" onClick={e => e.stopPropagation()}>
                             <h3 className="text-lg font-bold mb-4">Your QR Code</h3>
                             <img
                                 src={`data:image/png;base64,${selectedQr}`}
@@ -50,7 +50,7 @@ export default function MyRegistrations(){
                 </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 {registrations.map(reg => (
                     <div key={reg.id} className="bg-white rounded-lg shadow-md p-6">
 

@@ -1,9 +1,9 @@
-import {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import api from '../api/axios.js'
-import {uploadToCloudinary} from "../api/cloudinary.js";
+import { uploadToCloudinary } from "../api/cloudinary.js"
 
-export default function CreateEvent(){
+export default function CreateEvent() {
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -24,73 +24,73 @@ export default function CreateEvent(){
     const [submitted, setSubmitted] = useState(false)
     const navigate = useNavigate()
 
-    const handleChange = (e) =>{
-        setFormData({...formData, [e.target.name]: e.target.value })
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value })
     }
 
-    const handleFileUpload = async (e, type) =>{
+    const handleFileUpload = async (e, type) => {
         const file = e.target.files[0]
         if (!file) return
 
         const allowed = ['image/jpeg', 'image/png', 'application/pdf']
-        if (!allowed.includes(file.type)){
+        if (!allowed.includes(file.type)) {
             setError('Only JPG, PNG or PDF files are allowed.')
             return
         }
 
-        if (file.size > 5 * 1024 * 1024){
+        if (file.size > 5 * 1024 * 1024) {
             setError('File size must be under 5MB')
             return
         }
 
         setError('')
 
-        try{
-            if (type === 'idCard'){
+        try {
+            if (type === 'idCard') {
                 setIdCardUploading(true)
                 const url = await uploadToCloudinary(file)
                 setIdCardUrl(url)
-            }else {
+            } else {
                 setPermissionLetterUploading(true)
                 const url = await uploadToCloudinary(file)
                 setPermissionLetterUrl(url)
             }
-        }catch (err){
+        } catch (err) {
             setError('File upload failed. Please try again')
-        }finally {
+        } finally {
             setIdCardUploading(false)
             setPermissionLetterUploading(false)
         }
     }
 
-    const handleSubmit = async (e) =>{
+    const handleSubmit = async (e) => {
         e.preventDefault()
         setError('')
 
-        if (!idCardUrl && !permissionLetterUrl){
+        if (!idCardUrl && !permissionLetterUrl) {
             setError('Please provide at least one verification document URL.')
             return
         }
 
         setLoading(true)
-        try{
-            await api.post(`/events`,{
+        try {
+            await api.post(`/events`, {
                 ...formData,
                 idCardUrl,
                 permissionLetterUrl,
                 capacity: parseInt(formData.capacity),
                 eventDate: formData.eventDate ? formData.eventDate + ':00' : null,
-                registrationDeadline: formData.registrationDeadline ? formData.registrationDeadline + ':00' :null
+                registrationDeadline: formData.registrationDeadline ? formData.registrationDeadline + ':00' : null
             })
             setSubmitted(true)
-        }catch (err){
+        } catch (err) {
             setError(err.response?.data?.message || 'Failed to create event')
-        }finally {
+        } finally {
             setLoading(false)
         }
     }
 
-    const  resetForm = () =>{
+    const resetForm = () => {
         setSubmitted(false)
         setFormData({
             title: '',
@@ -98,30 +98,32 @@ export default function CreateEvent(){
             eventDate: '',
             venue: '',
             capacity: '',
-            registrationDeadline: ''
+            registrationDeadline: '',
+            idCardUrl: '',
+            permissionLetterUrl: ''
         })
         setIdCardUrl('')
         setPermissionLetterUrl('')
     }
 
     if (submitted) return (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-            <div className="bg-white p-10 rounded-xl shadow-md text-center max-w-md w-full">
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+            <div className="bg-white p-6 sm:p-10 rounded-xl shadow-md text-center max-w-md w-full">
                 <p className="text-5xl mb-4">🎉</p>
                 <h2 className="text-2xl font-bold text-gray-800 mb-2">Event Submitted!</h2>
                 <p className="text-gray-500 text-sm mb-6">
                     Your event has been submitted for admin review. You'll be notified once it's approved
                 </p>
-                <div className="flex gap-3">
+                <div className="flex flex-col sm:flex-row gap-3">
                     <button
                         onClick={() => navigate(`/my-events`)}
-                        className="flex-1 bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700"
+                        className="w-full sm:flex-1 bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700"
                     >
                         View My Events
                     </button>
                     <button
                         onClick={resetForm}
-                        className="flex-1 border border-gray-300 text-gray-600 py-2 rounded-lg font-medium hover:bg-gray-50"
+                        className="w-full sm:flex-1 border border-gray-300 text-gray-600 py-2 rounded-lg font-medium hover:bg-gray-50"
                     >
                         Create Another
                     </button>
@@ -130,10 +132,9 @@ export default function CreateEvent(){
         </div>
     )
 
-    return(
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8">
-            <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
-
+    return (
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8 px-4">
+            <div className="bg-white p-6 sm:p-8 rounded-lg shadow-md w-full max-w-lg">
                 <h1 className="text-2xl font-bold text-center text-blue-600 mb-2">
                     Create Event
                 </h1>
@@ -143,14 +144,13 @@ export default function CreateEvent(){
                 </p>
 
                 {error && (
-                    <div className="bg-red-50 text-red-600 p-3 rounded mb-4 text-sm">
+                    <div className="bg-red-50 text-red-600 p-3 rounded mb-4 text-sm break-words">
                         {error}
                     </div>
                 )}
 
                 <form onSubmit={handleSubmit}>
-
-                    <div className='mb-4'>
+                    <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                             Event Title
                         </label>
@@ -165,7 +165,7 @@ export default function CreateEvent(){
                         />
                     </div>
 
-                    <div className='mb-4'>
+                    <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                             Description
                         </label>
@@ -180,7 +180,7 @@ export default function CreateEvent(){
                         />
                     </div>
 
-                    <div className='mb-4'>
+                    <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                             Venue
                         </label>
@@ -195,7 +195,7 @@ export default function CreateEvent(){
                         />
                     </div>
 
-                    <div className='mb-4'>
+                    <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                             Capacity
                         </label>
@@ -210,9 +210,8 @@ export default function CreateEvent(){
                         />
                     </div>
 
-                    <div className="flex gap-4 mb-6">
-
-                        <div className="flex-1 min-w-0">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                        <div className="min-w-0">
                             <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Event Date & Time
                             </label>
@@ -226,7 +225,7 @@ export default function CreateEvent(){
                             />
                         </div>
 
-                        <div className="flex-1 min-w-0">
+                        <div className="min-w-0">
                             <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Registration Deadline
                             </label>
@@ -251,17 +250,30 @@ export default function CreateEvent(){
                         </p>
 
                         <div className="mb-3">
-                            <label className="block text-xs text-gray-500 mb-1">🪪 ID Card URL</label>
+                            <label className="block text-xs text-gray-500 mb-1">🪪 ID Card</label>
                             {idCardUrl ? (
-                                <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded px-3 py-2">
-                                    <span className="text-green-600 text-xs flex-1">✅ Upload successfully</span>
-                                    <a href={idCardUrl} target="_blank" rel="noreferrer"
-                                        className="text-blue-600 text-xs hover:underline">View</a>
-                                    <button type={"button"} onClick={() => setIdCardUrl('')}
-                                        className="text-red-400 text-xs hover:text-red-600">Remove</button>
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-2 bg-green-50 border border-green-200 rounded px-3 py-2">
+                                    <span className="text-green-700 text-xs flex-1 break-words">✅ Upload successful</span>
+                                    <div className="flex items-center gap-3">
+                                        <a
+                                            href={idCardUrl}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="text-blue-600 text-xs hover:underline"
+                                        >
+                                            View
+                                        </a>
+                                        <button
+                                            type="button"
+                                            onClick={() => setIdCardUrl('')}
+                                            className="text-red-500 text-xs hover:text-red-700"
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
                                 </div>
-                            ) :(
-                                <label className={`flex items-center justify-center gap-2 border-2 border-dashed rounded-lg px-4 py-3 cursor-pointer transition ${idCardUploading ? 'border-blue-300 bg-blue-50' : 'border-gray-300 hover:border-blue-400 hover:bg-blue-50'}`}>
+                            ) : (
+                                <label className={`flex items-center justify-center gap-2 border-2 border-dashed rounded-lg px-4 py-3 cursor-pointer transition text-center ${idCardUploading ? 'border-blue-300 bg-blue-50' : 'border-gray-300 hover:border-blue-400 hover:bg-blue-50'}`}>
                                     <input
                                         type="file"
                                         accept=".jpg, .jpeg, .png, .pdf"
@@ -269,27 +281,40 @@ export default function CreateEvent(){
                                         onChange={(e) => handleFileUpload(e, 'idCard')}
                                         disabled={idCardUploading}
                                     />
-                                    {idCardUploading ?(
+                                    {idCardUploading ? (
                                         <span className="text-blue-600 text-sm">Uploading...</span>
                                     ) : (
-                                        <span className='text-gray-500 text-sm'>Click to upload ID Card</span>
+                                        <span className="text-gray-600 text-sm">Click to upload ID Card</span>
                                     )}
                                 </label>
                             )}
                         </div>
 
                         <div className="mb-3">
-                            <label className="block text-xs text-gray-500 mb-1">📄 Permission Letter URL</label>
-                            {permissionLetterUrl  ? (
-                                <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded px-3 py-2">
-                                    <span className="text-green-600 text-xs flex-1">✅ Upload successfully</span>
-                                    <a href={permissionLetterUrl} target="_blank" rel="noreferrer"
-                                       className="text-blue-600 text-xs hover:underline">View</a>
-                                    <button type={"button"} onClick={() => setPermissionLetterUrl('')}
-                                            className="text-red-400 text-xs hover:text-red-600">Remove</button>
+                            <label className="block text-xs text-gray-500 mb-1">📄 Permission Letter</label>
+                            {permissionLetterUrl ? (
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-2 bg-green-50 border border-green-200 rounded px-3 py-2">
+                                    <span className="text-green-700 text-xs flex-1 break-words">✅ Upload successful</span>
+                                    <div className="flex items-center gap-3">
+                                        <a
+                                            href={permissionLetterUrl}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="text-blue-600 text-xs hover:underline"
+                                        >
+                                            View
+                                        </a>
+                                        <button
+                                            type="button"
+                                            onClick={() => setPermissionLetterUrl('')}
+                                            className="text-red-500 text-xs hover:text-red-700"
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
                                 </div>
-                            ) :(
-                                <label className={`flex items-center justify-center gap-2 border-2 border-dashed rounded-lg px-4 py-3 cursor-pointer transition ${permissionLetterUploading ? 'border-blue-300 bg-blue-50' : 'border-gray-300 hover:border-blue-400 hover:bg-blue-50'}`}>
+                            ) : (
+                                <label className={`flex items-center justify-center gap-2 border-2 border-dashed rounded-lg px-4 py-3 cursor-pointer transition text-center ${permissionLetterUploading ? 'border-blue-300 bg-blue-50' : 'border-gray-300 hover:border-blue-400 hover:bg-blue-50'}`}>
                                     <input
                                         type="file"
                                         accept=".jpg, .jpeg, .png, .pdf"
@@ -297,15 +322,14 @@ export default function CreateEvent(){
                                         onChange={(e) => handleFileUpload(e, 'permission')}
                                         disabled={permissionLetterUploading}
                                     />
-                                    {permissionLetterUploading ?(
+                                    {permissionLetterUploading ? (
                                         <span className="text-blue-600 text-sm">Uploading...</span>
                                     ) : (
-                                        <span className='text-gray-500 text-sm'>Click to upload Permission Letter</span>
+                                        <span className="text-gray-600 text-sm">Click to upload Permission Letter</span>
                                     )}
                                 </label>
                             )}
                         </div>
-
                     </div>
 
                     <button
@@ -315,9 +339,7 @@ export default function CreateEvent(){
                     >
                         {loading ? 'Submitting...' : 'Submit for Approval'}
                     </button>
-
                 </form>
-
             </div>
         </div>
     )

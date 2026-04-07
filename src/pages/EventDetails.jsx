@@ -59,10 +59,10 @@ export default function EventDetails(){
 
 
     return(
-        <div className="max-w-3xl mx-auto">
+        <div className="mx-auto w-full max-w-3xl px-4 sm:px-6 lg:px-8">
 
-            <div className="bg-blue-600 rounded-t-lg px-8 py-6">
-                <h1 className="text-3xl font-bold text-white">{event.title}</h1>
+            <div className="bg-blue-600 rounded-t-lg px-4 sm:px-8 py-5 sm:py-6">
+                <h1 className="text-2xl sm:text-3xl font-bold text-white">{event.title}</h1>
                 <p className="text-blue-200 mt-1">Organized by {event.organizerName}</p>
             </div>
 
@@ -70,7 +70,7 @@ export default function EventDetails(){
 
                 <p className="text-gray-700 mb-6">{event.description}</p>
 
-                <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                     <div className="bg-gray-50 rounded-lg p-4">
                         <p className="text-xs text-gray-500 mb-1">Event Date</p>
                         <p className="font-medium text-gray-800">

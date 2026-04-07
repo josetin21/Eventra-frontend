@@ -42,8 +42,8 @@ export default function Login(){
     }
 
     return(
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-            <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8 px-4">
+            <div className="bg-white p-8 sm:p-8 rounded-lg shadow-md w-full max-w-md">
 
                 <h1 className="text-2xl font-bold text-center text-blue-600 mb-2">
                     Welcome to Eventra

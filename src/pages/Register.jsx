@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import api from "../api/axios";
+import { useState } from "react"
+import { useNavigate, Link } from "react-router-dom"
+import api from "../api/axios"
 
-export default function Register(){
+export default function Register() {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -17,45 +17,43 @@ export default function Register(){
     const navigate = useNavigate()
     const [showPassword, setShowPassword] = useState(false)
 
-    const handleChange = (e) =>{
+    const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value })
     }
 
-    const handleSubmit = async (e) =>{
+    const handleSubmit = async (e) => {
         e.preventDefault()
         setError('')
         setLoading(true)
 
-        try{
-            await api.post('/auth/register',{
+        try {
+            await api.post('/auth/register', {
                 ...formData,
                 year: parseInt(formData.year)
             })
             navigate('/login')
-        } catch(err){
+        } catch (err) {
             setError(err.response?.data?.message || 'Registration failed')
-        } finally{
+        } finally {
             setLoading(false)
         }
     }
 
-    return(
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8">
-            <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-
+    return (
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8 px-4">
+            <div className="bg-white p-6 sm:p-8 rounded-lg shadow-md w-full max-w-md">
                 <h1 className="text-2xl font-bold text-center text-blue-600 mb-2">
                     Create Account
                 </h1>
                 <p className="text-center text-gray-500 mb-6">Join Eventra today</p>
 
                 {error && (
-                    <div className="bg-red-50 text-red-600 p-3 rounded mb-4 text-sm">
+                    <div className="bg-red-50 text-red-600 p-3 rounded mb-4 text-sm break-words">
                         {error}
                     </div>
                 )}
 
                 <form onSubmit={handleSubmit}>
-                    
                     <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                             Full Name
@@ -65,7 +63,7 @@ export default function Register(){
                             name="name"
                             value={formData.name}
                             onChange={handleChange}
-                            className="w-full border border-gray-300 rounded px-3 py-2 focus outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="John Doe"
                             required
                         />
@@ -85,6 +83,7 @@ export default function Register(){
                             required
                         />
                     </div>
+
                     <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                             Institution Name
@@ -110,14 +109,16 @@ export default function Register(){
                                 name="password"
                                 value={formData.password}
                                 onChange={handleChange}
-                                className="w-full border border-gray-300 rounded px-3 py-2 focus outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full border border-gray-300 rounded px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 placeholder="••••••••"
                                 required
                             />
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 inline-flex items-center justify-center rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-50"
+                                aria-label={showPassword ? "Hide password" : "Show password"}
+                                title={showPassword ? "Hide password" : "Show password"}
                             >
                                 {showPassword ? (
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -142,15 +143,14 @@ export default function Register(){
                             name="department"
                             value={formData.department}
                             onChange={handleChange}
-                            className="w-full border border-gray-300 rounded px-3 py-2 focus outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Computer Science"
                             required
                         />
                     </div>
 
-                    <div className="flex gap-4 mb-6">
-
-                        <div className="flex-1">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                        <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Year
                             </label>
@@ -158,18 +158,18 @@ export default function Register(){
                                 name="year"
                                 value={formData.year}
                                 onChange={handleChange}
-                                className="w-full border border-gray-300 rounded px-3 py-2 focus outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 required
                             >
-                                    <option value="">Select</option>
-                                    <option value="1">1st Year</option>
-                                    <option value="2">2nd Year</option>
-                                    <option value="3">3rd Year</option>
-                                    <option value="4">4th Year</option>
+                                <option value="">Select</option>
+                                <option value="1">1st Year</option>
+                                <option value="2">2nd Year</option>
+                                <option value="3">3rd Year</option>
+                                <option value="4">4th Year</option>
                             </select>
                         </div>
-                        
-                        <div className="flex-1">
+
+                        <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Designation
                             </label>
@@ -177,15 +177,15 @@ export default function Register(){
                                 name="designation"
                                 value={formData.designation}
                                 onChange={handleChange}
-                                className="w-full border border-gray-300 rounded px-3 py-2 focus outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             >
-                                    <option value="STUDENT">Student</option>
-                                    <option value="FACULTY">Faculty</option>
-                                    <option value="CLUB_COORDINATOR">Club Coordinator</option>
+                                <option value="STUDENT">Student</option>
+                                <option value="FACULTY">Faculty</option>
+                                <option value="CLUB_COORDINATOR">Club Coordinator</option>
                             </select>
                         </div>
-
                     </div>
+
                     <button
                         type="submit"
                         disabled={loading}
@@ -195,13 +195,12 @@ export default function Register(){
                     </button>
                 </form>
 
-                <p className="text-center text-sm text-gray-500 mt-4"> 
+                <p className="text-center text-sm text-gray-500 mt-4">
                     Already have an account?{' '}
                     <Link to="/login" className="text-blue-600 hover:underline">
                         Sign in
                     </Link>
                 </p>
-
             </div>
         </div>
     )
