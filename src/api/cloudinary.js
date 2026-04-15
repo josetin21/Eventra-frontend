@@ -1,5 +1,5 @@
-const CLOUD_NAME = 'dwf8kcsup'
-const UPLOAD_PRESET = 'eventra_docs'
+const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
 
 export async function uploadToCloudinary(file){
     const formData = new FormData()
