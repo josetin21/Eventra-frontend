@@ -10,7 +10,7 @@ export default function ResetPassword() {
         email: location.state?.email || '',
         otp: '',
         newPassword: '',
-        confirmNewPassword: '',
+        confirmPassword: '',
     })
 
     const [error, setError] = useState('')
@@ -26,7 +26,7 @@ export default function ResetPassword() {
         setError('')
         setMessage('')
 
-        if (form.newPassword !== form.confirmNewPassword) {
+        if (form.newPassword !== form.confirmPassword) {
             setError("New password and confirm password do not match")
             return
         }
@@ -117,8 +117,8 @@ export default function ResetPassword() {
                             </label>
                             <input
                                 type="password"
-                                name="confirmNewPassword"
-                                value={form.confirmNewPassword}
+                                name="confirmPassword"
+                                value={form.confirmPassword}
                                 onChange={handleChange}
                                 className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 minLength={8}
