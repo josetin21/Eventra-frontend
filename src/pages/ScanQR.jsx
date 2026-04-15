@@ -47,7 +47,7 @@ export default function ScanQR() {
                 const session = res.data
                 if (session.length > 0) {
                     const latest = session[session.length - 1]
-                    const isActive = parseData(latest.expiresAt) > new Date()git
+                    const isActive = parseData(latest.expiresAt) > new Date()
                     if (isActive) {
                         setSession(latest)
                     } else {
