@@ -32,7 +32,7 @@ export default function ScanQR() {
     useEffect(() => {
         if (!session) return
         const interval = setInterval(() => {
-            const diff = Math.max(0, Math.floor((new Date(session.expiresAt) - new Date()) / 1000))
+            const diff = Math.max(0, Math.floor((new Date(session.expiresAt + 'Z') - new Date()) / 1000))
             setTimeLeft(diff)
             if (diff === 0) clearInterval(interval)
         }, 1000)
@@ -47,7 +47,7 @@ export default function ScanQR() {
                 const session = res.data
                 if (session.length > 0) {
                     const latest = session[session.length - 1]
-                    const isActive = latest.isActive && new Date(latest.expiresAt) > new Date()
+                    const isActive = latest.isActive && new Date(latest.expiresAt + 'Z') > new Date()
                     if (isActive) {
                         setSession(latest)
                     } else {
