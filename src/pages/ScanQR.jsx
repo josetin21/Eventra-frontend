@@ -47,7 +47,7 @@ export default function ScanQR() {
                 const session = res.data
                 if (session.length > 0) {
                     const latest = session[session.length - 1]
-                    const isActive = latest.isActive || parseDate(latest.expiresAt) > new Date()
+                    const isActive = latest.isActive && new Date(latest.expiresAt) > new Date()
                     if (isActive) {
                         setSession(latest)
                     } else {
@@ -162,12 +162,7 @@ export default function ScanQR() {
         })
     }
 
-    const parseData = (dateStr) =>{
-        if (!dateStr) return null
-        return new Date(dateStr.replace(/(\.\d{3})\d+/, '$1'))
-    }
-
-    const isSessionActive = session && (session.isActive || timeLeft > 0)
+    const isSessionActive = session && session.isActive && (timeLeft === null || timeLeft > 0)
 
     if (!eventId) return (
         <div className="text-center py-20 text-gray-500">
